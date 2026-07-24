@@ -659,7 +659,7 @@ const SHAPES = [
   { gen: f74Segs, label: "the signature", sub: "one person · whole loop" },
   { gen: bonsaiSegs, label: "patient craft", sub: "grown, not generated" },
   { gen: fujiShape, label: "the long climb", sub: "focus · craft" },
-  { gen: pikachuSegs, label: "pika pika", sub: "電気ねずみ · just for fun" },
+  { gen: pikachuSegs, label: "pika pika", sub: "電気ねずみ · click me", pika: true },
   { gen: hiveShape, label: "product systems", sub: "zero to shipped" },
 ];
 
@@ -843,8 +843,60 @@ function nextShape(manual = false) {
   }
 }
 
+/* jump straight to a shape (used by the console 'pika' command) */
+function gotoShape(idx) {
+  shapeIdx = ((idx % SHAPES.length) + SHAPES.length) % SHAPES.length;
+  setCaption();
+  if (reduced) drawStatic();
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = setInterval(nextShape, 5200); }
+}
+
+/* a synthesized "pika-pika!" chirp + electric zap — no audio files */
+let audioCtx = null;
+function pikaSound() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const A = audioCtx, now = A.currentTime;
+    const chirp = (t0, f0, f1) => {
+      const o = A.createOscillator(), g = A.createGain();
+      o.type = "square";
+      o.frequency.setValueAtTime(f0, t0);
+      o.frequency.exponentialRampToValueAtTime(f1, t0 + 0.1);
+      o.frequency.exponentialRampToValueAtTime(f0 * 1.4, t0 + 0.16);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.16, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18);
+      o.connect(g); g.connect(A.destination);
+      o.start(t0); o.stop(t0 + 0.2);
+    };
+    chirp(now, 780, 1500);         // "pika"
+    chirp(now + 0.2, 720, 1400);   // "pika"
+  } catch {}
+}
+function pikaZap() {
+  if (reduced) return;
+  for (const p of particles) {
+    p.vx += (Math.random() - 0.5) * 16;
+    p.vy += (Math.random() - 0.5) * 16;
+  }
+}
+
 captionBtn.addEventListener("click", () => nextShape(true));
-canvas.addEventListener("click", () => nextShape(true));
+canvas.addEventListener("click", () => {
+  if (SHAPES[shapeIdx].pika) { pikaSound(); pikaZap(); return; }
+  nextShape(true);
+});
+
+/* console 'pika' command bridges in here */
+addEventListener("hero:pika", () => {
+  const idx = SHAPES.findIndex((s) => s.pika);
+  if (idx < 0) return;
+  scrollTo({ top: 0, behavior: "smooth" });
+  gotoShape(idx);
+  pikaSound();
+  pikaZap();
+});
 
 canvas.parentElement.addEventListener("pointermove", (e) => {
   const r = canvas.getBoundingClientRect();

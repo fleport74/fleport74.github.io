@@ -68,6 +68,7 @@ const COMMANDS = {
       "contact       how to reach me",
       "accent <c>    theme: shu | gold | cyan | violet | mint",
       "ring          craft demo",
+      "pika          ⚡ summon pikachu",
       "goto <id>     scroll to: work | approach | contact",
       "clear         wipe output",
       "exit          close console",
@@ -103,6 +104,12 @@ Voice copilots, parametric CAD, agents in production.
 Repos are mostly private; ask for a walkthrough.`,
 
   ring: () => RING_ART,
+
+  pika: () => {
+    dispatchEvent(new CustomEvent("hero:pika"));
+    closeConsole();
+    return `⚡ <span class="out-accent">pika pika!</span> summoning… look up.`;
+  },
 
   accent: (arg) => {
     if (applyAccent(arg)) {
