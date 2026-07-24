@@ -261,10 +261,14 @@ h2 {
 /* ---------- work grid ---------- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1px;
   background: var(--hairline);
   border: 1px solid var(--hairline);
+}
+
+@media (max-width: 720px) {
+  .grid { grid-template-columns: 1fr; }
 }
 
 .card {

@@ -79,12 +79,10 @@ Voice copilots, parametric CAD, agents in production.
 
   projects: () =>
     [
-      "jarvis       local voice copilot (Python · MCP)",
-      "cad-engine   parametric NURBS jewelry generator (TS · rhino3dm)",
-      "seasons      telegram command center + on-chain terminal",
-      "greenhouse   voice-to-task ops (Next.js · Claude)",
-      "hive         spatial team workspace (Next.js monorepo)",
-      "qfs-field    offline-first field-service app (React Native)",
+      "jarvis        local voice copilot (Python · MCP)",
+      "cad-engine    parametric NURBS jewelry generator (TS · rhino3dm)",
+      "hive          spatial team workspace (Next.js monorepo)",
+      "client-work   production systems for teams (private; ask)",
     ].join("\n"),
 
   stack: () =>
