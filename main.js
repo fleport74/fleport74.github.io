@@ -218,26 +218,26 @@ function ringShape() {
   return segs;
 }
 
-/* Torii gate framing a voice waveform: the temple gate is the frame,
-   the sound wave lives in the opening. */
+/* Torii gate framing a full voice waveform: the gate sits high and wide,
+   the sound wave is the hero underneath it. */
 function toriiShape() {
   const segs = [];
-  // two pillars
-  segs.push(...polylineSegs([[-0.5, -0.8], [-0.5, 0.55]]));
-  segs.push(...polylineSegs([[0.5, -0.8], [0.5, 0.55]]));
+  // two pillars (wide stance, tall)
+  segs.push(...polylineSegs([[-0.64, -0.78], [-0.64, 0.58]]));
+  segs.push(...polylineSegs([[0.64, -0.78], [0.64, 0.58]]));
   // kasagi (curved top lintel) + shimaki (parallel bar below it)
-  segs.push(...polylineSegs([[-0.84, 0.56], [-0.4, 0.66], [0, 0.69], [0.4, 0.66], [0.84, 0.56]]));
-  segs.push(...polylineSegs([[-0.8, 0.49], [0, 0.51], [0.8, 0.49]]));
+  segs.push(...polylineSegs([[-0.95, 0.58], [-0.46, 0.68], [0, 0.72], [0.46, 0.68], [0.95, 0.58]]));
+  segs.push(...polylineSegs([[-0.9, 0.5], [0, 0.52], [0.9, 0.5]]));
   // nuki (through beam) + gakuzuka (central tablet)
-  segs.push(...polylineSegs([[-0.63, 0.34], [0.63, 0.34]]));
-  segs.push(...polylineSegs([[-0.07, 0.34], [0.07, 0.34], [0.07, 0.5], [-0.07, 0.5]], true));
-  // voice waveform inside the gate
-  const bars = 11, yc = -0.16;
+  segs.push(...polylineSegs([[-0.78, 0.36], [0.78, 0.36]]));
+  segs.push(...polylineSegs([[-0.08, 0.36], [0.08, 0.36], [0.08, 0.54], [-0.08, 0.54]], true));
+  // voice waveform, full and prominent, inside the gate
+  const bars = 19, yc = -0.1;
   for (let i = 0; i < bars; i++) {
-    const x = -0.4 + (i / (bars - 1)) * 0.8;
-    const env = 0.28 + 0.72 * Math.exp(-(x * x) / 0.14);
-    const rhythm = 0.5 + 0.5 * Math.abs(Math.sin(i * 1.7 + 0.6));
-    const h = 0.3 * env * rhythm;
+    const x = -0.54 + (i / (bars - 1)) * 1.08;
+    const env = 0.2 + 0.8 * Math.exp(-(x * x) / 0.16);
+    const rhythm = 0.45 + 0.55 * Math.abs(Math.sin(i * 1.6 + 0.5));
+    const h = 0.42 * env * rhythm;
     segs.push([x, yc - h, x, yc + h]);
   }
   return segs;
@@ -274,44 +274,57 @@ function netShape() {
   return segs;
 }
 
-/* Healthcare: heart outline with an ECG pulse across it. */
-function heartShape() {
+/* Healthcare: a DNA double helix, two phase-shifted strands with rungs. */
+function dnaShape() {
   const segs = [];
-  const pts = [];
-  const steps = 64;
-  for (let i = 0; i <= steps; i++) {
-    const t = (i / steps) * Math.PI * 2;
-    const x = 16 * Math.pow(Math.sin(t), 3);
-    const y =
-      13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    pts.push([x * 0.04, y * 0.04 + 0.08]);
+  const A = 0.34, turns = 2.3, steps = 54;
+  const strand = (phase) => {
+    const pts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const y = -0.74 + t * 1.48;
+      const x = A * Math.sin(t * Math.PI * 2 * turns + phase);
+      pts.push([x, y]);
+    }
+    return pts;
+  };
+  const s1 = strand(0), s2 = strand(Math.PI);
+  segs.push(...polylineSegs(s1));
+  segs.push(...polylineSegs(s2));
+  // base-pair rungs: short at the crossings, wide at the bulges
+  const rungs = 11;
+  for (let i = 1; i < rungs; i++) {
+    const idx = Math.round((i / rungs) * steps);
+    segs.push([s1[idx][0], s1[idx][1], s2[idx][0], s2[idx][1]]);
   }
-  segs.push(...polylineSegs(pts, true));
-  segs.push(
-    ...polylineSegs([
-      [-0.5, -0.02], [-0.26, -0.02], [-0.16, 0.02], [-0.07, 0.3],
-      [0.01, -0.24], [0.09, 0.05], [0.19, 0.05], [0.28, -0.02], [0.5, -0.02],
-    ])
-  );
   return segs;
 }
 
-/* Blockchain: three linked blocks, each stamped with a diamond glyph. */
-function blockchainShape() {
+/* On-chain systems: three interlocking chain links along a tilt. */
+function chainShape() {
   const segs = [];
-  const h = 0.15;
-  const centers = [[-0.52, 0.22], [0, 0], [0.52, -0.22]];
-  for (const [cx, cy] of centers) {
-    segs.push(...polylineSegs(
-      [[cx - h, cy - h], [cx + h, cy - h], [cx + h, cy + h], [cx - h, cy + h]], true));
-    segs.push(...polylineSegs(
-      [[cx, cy - h * 0.5], [cx + h * 0.5, cy], [cx, cy + h * 0.5], [cx - h * 0.5, cy]], true));
-  }
-  for (let i = 0; i < centers.length - 1; i++) {
-    const [ax, ay] = centers[i], [bx, by] = centers[i + 1];
-    segs.push(...polylineSegs([[ax + h, ay - h * 0.25], [bx - h, by + h * 0.25]]));
-    segs.push(...polylineSegs([[ax + h, ay + h * 0.25], [bx - h, by - h * 0.25]]));
-  }
+  const rot = -Math.PI / 7;
+  const link = (cx, cy) => {
+    const ring = (rx, ry) => {
+      const pts = [];
+      const steps = 34;
+      for (let i = 0; i <= steps; i++) {
+        const a = (i / steps) * Math.PI * 2;
+        const x = rx * Math.cos(a), y = ry * Math.sin(a);
+        pts.push([
+          cx + x * Math.cos(rot) - y * Math.sin(rot),
+          cy + x * Math.sin(rot) + y * Math.cos(rot),
+        ]);
+      }
+      return pts;
+    };
+    segs.push(...polylineSegs(ring(0.27, 0.135), true)); // outer wall
+    segs.push(...polylineSegs(ring(0.19, 0.065), true)); // inner wall
+  };
+  const dx = 0.4 * Math.cos(rot), dy = 0.4 * Math.sin(rot);
+  link(-dx, -dy);
+  link(0, 0);
+  link(dx, dy);
   return segs;
 }
 
@@ -353,6 +366,68 @@ function hiveShape() {
   return segs;
 }
 
+/* Mt. Fuji with a rising sun disc: heroic, hinomaru composition. */
+function fujiShape() {
+  const segs = [];
+  // rising sun behind the peak
+  segs.push(...circleSegs(0, 0.5, 0.24, 44));
+  // mountain silhouette with a snow-capped summit
+  segs.push(...polylineSegs([
+    [-0.9, -0.52], [-0.4, 0.16], [-0.2, 0.42],
+    [-0.12, 0.38], [-0.05, 0.45], [0.03, 0.39], [0.11, 0.45], [0.2, 0.42],
+    [0.4, 0.16], [0.9, -0.52],
+  ]));
+  // snowline ridge just below the cap
+  segs.push(...polylineSegs([
+    [-0.26, 0.3], [-0.14, 0.24], [-0.02, 0.3], [0.1, 0.24], [0.24, 0.3],
+  ]));
+  // horizon
+  segs.push(...polylineSegs([[-0.95, -0.52], [0.95, -0.52]]));
+  return segs;
+}
+
+/* Maps & routing: a winding route with waypoints and a location pin. */
+function mapShape() {
+  const segs = [];
+  segs.push(...polylineSegs([
+    [-0.72, -0.42], [-0.48, -0.12], [-0.54, 0.2], [-0.22, 0.34],
+    [0.12, 0.24], [0.28, 0.02],
+  ]));
+  segs.push(...circleSegs(-0.72, -0.42, 0.05, 12)); // start dot
+  segs.push(...circleSegs(-0.22, 0.34, 0.045, 12)); // waypoint
+  // location pin at the destination: teardrop head + hole + point
+  const px = 0.42, py = 0.3;
+  segs.push(...circleSegs(px, py, 0.14, 24));
+  segs.push(...circleSegs(px, py, 0.055, 12));
+  segs.push(...polylineSegs([[px - 0.1, py - 0.09], [px, py - 0.32], [px + 0.1, py - 0.09]]));
+  return segs;
+}
+
+/* QR code: three finder patterns plus scattered data modules. */
+function qrShape() {
+  const segs = [];
+  const finder = (cx, cy) => {
+    segs.push(...polylineSegs(
+      [[cx - 0.18, cy - 0.18], [cx + 0.18, cy - 0.18], [cx + 0.18, cy + 0.18], [cx - 0.18, cy + 0.18]], true));
+    segs.push(...polylineSegs(
+      [[cx - 0.08, cy - 0.08], [cx + 0.08, cy - 0.08], [cx + 0.08, cy + 0.08], [cx - 0.08, cy + 0.08]], true));
+  };
+  finder(-0.45, 0.45);
+  finder(0.45, 0.45);
+  finder(-0.45, -0.45);
+  const mods = [
+    [0.08, 0.5], [0.3, 0.32], [0.5, -0.08], [0.2, -0.2], [0.46, -0.42],
+    [0.06, -0.46], [-0.08, 0.12], [0.16, 0.06], [-0.2, -0.12], [0.36, -0.3],
+    [0.5, 0.16], [-0.04, -0.3], [0.24, 0.5], [-0.28, 0.12],
+  ];
+  const m = 0.05;
+  for (const [x, y] of mods) {
+    segs.push(...polylineSegs(
+      [[x - m, y - m], [x + m, y - m], [x + m, y + m], [x - m, y + m]], true));
+  }
+  return segs;
+}
+
 /* Evenly sample `count` points along a segment list, by arc length. */
 function samplePoints(segs, count) {
   const lens = segs.map(([x1, y1, x2, y2]) => Math.hypot(x2 - x1, y2 - y1));
@@ -378,9 +453,12 @@ const SHAPES = [
   { gen: ringShape, label: "computational jewelry", sub: "parametric CAD · NURBS" },
   { gen: toriiShape, label: "voice interfaces", sub: "wake word · STT · TTS" },
   { gen: netShape, label: "applied AI", sub: "agents · tools · retrieval" },
-  { gen: heartShape, label: "healthcare", sub: "clinical logic · rules" },
-  { gen: blockchainShape, label: "on-chain systems", sub: "tokens · terminals" },
+  { gen: dnaShape, label: "healthcare", sub: "clinical logic · data" },
+  { gen: chainShape, label: "on-chain systems", sub: "tokens · terminals" },
   { gen: realEstateShape, label: "real-estate automation", sub: "ops · workflows" },
+  { gen: mapShape, label: "maps & routing", sub: "geo · logistics" },
+  { gen: qrShape, label: "phygital bridges", sub: "QR · scan-to-app" },
+  { gen: fujiShape, label: "the long climb", sub: "focus · craft" },
   { gen: hiveShape, label: "product systems", sub: "zero to shipped" },
 ];
 
@@ -503,7 +581,7 @@ function nextShape(manual = false) {
   if (reduced) drawStatic();
   if (manual && autoTimer) {
     clearInterval(autoTimer);
-    autoTimer = setInterval(nextShape, 6500);
+    autoTimer = setInterval(nextShape, 5200);
   }
 }
 
@@ -544,5 +622,5 @@ if (reduced) {
   drawStatic();
 } else {
   rafId = requestAnimationFrame(loop);
-  autoTimer = setInterval(nextShape, 6500);
+  autoTimer = setInterval(nextShape, 5200);
 }
