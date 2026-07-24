@@ -218,9 +218,9 @@ function ringShape() {
   return segs;
 }
 
-/* Torii gate framing a full voice waveform: the gate sits high and wide,
-   the sound wave is the hero underneath it. */
-function toriiShape() {
+/* Torii gate (the frame). The voice waveform inside it is drawn by the
+   live-wave builder so it can animate. */
+function toriiGateSegs() {
   const segs = [];
   // two pillars (wide stance, tall)
   segs.push(...polylineSegs([[-0.64, -0.78], [-0.64, 0.58]]));
@@ -231,15 +231,6 @@ function toriiShape() {
   // nuki (through beam) + gakuzuka (central tablet)
   segs.push(...polylineSegs([[-0.78, 0.36], [0.78, 0.36]]));
   segs.push(...polylineSegs([[-0.08, 0.36], [0.08, 0.36], [0.08, 0.54], [-0.08, 0.54]], true));
-  // voice waveform, full and prominent, inside the gate
-  const bars = 19, yc = -0.1;
-  for (let i = 0; i < bars; i++) {
-    const x = -0.54 + (i / (bars - 1)) * 1.08;
-    const env = 0.2 + 0.8 * Math.exp(-(x * x) / 0.16);
-    const rhythm = 0.45 + 0.55 * Math.abs(Math.sin(i * 1.6 + 0.5));
-    const h = 0.42 * env * rhythm;
-    segs.push([x, yc - h, x, yc + h]);
-  }
   return segs;
 }
 
@@ -274,30 +265,31 @@ function netShape() {
   return segs;
 }
 
-/* Healthcare: a DNA double helix, two phase-shifted strands with rungs. */
-function dnaShape() {
-  const segs = [];
-  const A = 0.34, turns = 2.3, steps = 54;
+/* Healthcare: a DNA double helix as 3D edges (spun by the 3D pipeline). */
+function dnaEdges() {
+  const e = [];
+  const A = 0.32, turns = 2.4, steps = 56;
   const strand = (phase) => {
     const pts = [];
     for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const y = -0.74 + t * 1.48;
-      const x = A * Math.sin(t * Math.PI * 2 * turns + phase);
-      pts.push([x, y]);
+      const f = i / steps;
+      const y = -0.78 + f * 1.56;
+      const th = f * Math.PI * 2 * turns + phase;
+      pts.push([A * Math.cos(th), y, A * Math.sin(th)]);
     }
     return pts;
   };
   const s1 = strand(0), s2 = strand(Math.PI);
-  segs.push(...polylineSegs(s1));
-  segs.push(...polylineSegs(s2));
-  // base-pair rungs: short at the crossings, wide at the bulges
-  const rungs = 11;
+  for (let i = 0; i < steps; i++) {
+    e.push([...s1[i], ...s1[i + 1]]);
+    e.push([...s2[i], ...s2[i + 1]]);
+  }
+  const rungs = 12;
   for (let i = 1; i < rungs; i++) {
     const idx = Math.round((i / rungs) * steps);
-    segs.push([s1[idx][0], s1[idx][1], s2[idx][0], s2[idx][1]]);
+    e.push([...s1[idx], ...s2[idx]]);
   }
-  return segs;
+  return e;
 }
 
 /* On-chain systems: three interlocking chain links along a tilt. */
@@ -446,18 +438,196 @@ function samplePoints(segs, count) {
 }
 
 /* ============================================================
+   3D PIPELINE — edges in 3D, projected + spun every frame
+   ============================================================ */
+
+/* Evenly sample points along a list of 3D edges [x1,y1,z1,x2,y2,z2]. */
+function sample3D(edges, count) {
+  const lens = edges.map((e) =>
+    Math.hypot(e[3] - e[0], e[4] - e[1], e[5] - e[2]));
+  const total = lens.reduce((a, b) => a + b, 0);
+  const pts = new Float32Array(count * 3);
+  let si = 0, acc = 0;
+  for (let k = 0; k < count; k++) {
+    const target = ((k + 0.5) / count) * total;
+    while (si < edges.length - 1 && acc + lens[si] < target) acc += lens[si++];
+    const f = lens[si] ? (target - acc) / lens[si] : 0;
+    const e = edges[si];
+    pts[k * 3] = e[0] + (e[3] - e[0]) * f;
+    pts[k * 3 + 1] = e[1] + (e[4] - e[1]) * f;
+    pts[k * 3 + 2] = e[2] + (e[5] - e[2]) * f;
+  }
+  return pts;
+}
+
+/* Turn a 3D edge generator into a live shape: {mk, anim}. Yaws around Y,
+   holds a fixed X tilt, projects with weak perspective. */
+function make3D(edgesFn, opts = {}) {
+  const spin = opts.spin ?? 0.4, tilt = opts.tilt ?? 0.5,
+    sc = opts.scale3 ?? 1, persp = opts.persp ?? 0.32;
+  let cache = null, cacheN = 0;
+  const base = (n) => {
+    if (cacheN !== n) { cache = sample3D(edgesFn(), n); cacheN = n; }
+    return cache;
+  };
+  const project = (out, t, n) => {
+    const p3 = base(n);
+    const ay = t * spin, cyA = Math.cos(ay), syA = Math.sin(ay);
+    const ct = Math.cos(tilt), st = Math.sin(tilt);
+    for (let i = 0; i < n; i++) {
+      const x = p3[i * 3], y = p3[i * 3 + 1], z = p3[i * 3 + 2];
+      const x1 = x * cyA + z * syA;
+      const z1 = -x * syA + z * cyA;
+      const y1 = y * ct - z1 * st;
+      const z2 = y * st + z1 * ct;
+      const f = 1 / (1 + persp * z2);
+      out[i * 2] = x1 * sc * f;
+      out[i * 2 + 1] = y1 * sc * f;
+    }
+  };
+  return {
+    mk: (n) => { const o = new Float32Array(n * 2); project(o, 0, n); return o; },
+    anim: (out, t, n) => project(out, t, n),
+  };
+}
+
+/* Round-brilliant diamond: table + girdle octagons, crown + pavilion facets. */
+function diamondEdges() {
+  const e = [], N = 8, yT = 0.4, rT = 0.24, yG = 0.06, rG = 0.58, culet = [0, -0.7, 0];
+  const table = [], girdle = [];
+  for (let i = 0; i < N; i++) {
+    const a = (i / N) * Math.PI * 2;
+    table.push([rT * Math.cos(a), yT, rT * Math.sin(a)]);
+    girdle.push([rG * Math.cos(a + Math.PI / N), yG, rG * Math.sin(a + Math.PI / N)]);
+  }
+  const ring = (arr) => { for (let i = 0; i < N; i++) e.push([...arr[i], ...arr[(i + 1) % N]]); };
+  ring(table); ring(girdle);
+  for (let i = 0; i < N; i++) {
+    e.push([...table[i], ...girdle[i]]);
+    e.push([...table[i], ...girdle[(i + N - 1) % N]]);
+    e.push([...girdle[i], ...culet]);
+  }
+  return e;
+}
+
+/* (2,3) torus knot. */
+function torusKnotEdges() {
+  const e = [], STEPS = 180, p = 2, q = 3, R = 0.42, r = 0.17;
+  const pt = (u) => {
+    const t = u * Math.PI * 2, rr = R + r * Math.cos(q * t);
+    return [rr * Math.cos(p * t), r * Math.sin(q * t), rr * Math.sin(p * t)];
+  };
+  let prev = pt(0);
+  for (let i = 1; i <= STEPS; i++) { const c = pt(i / STEPS); e.push([...prev, ...c]); prev = c; }
+  return e;
+}
+
+/* Wireframe globe: meridians + latitude rings. */
+function globeEdges() {
+  const e = [], R = 0.62, LON = 8, LAT = 5, SEG = 26;
+  const at = (lat, lon) =>
+    [R * Math.cos(lat) * Math.cos(lon), R * Math.sin(lat), R * Math.cos(lat) * Math.sin(lon)];
+  for (let j = 0; j < LON; j++) {
+    const lon = (j / LON) * Math.PI * 2;
+    let prev = at(-Math.PI / 2, lon);
+    for (let i = 1; i <= SEG; i++) { const c = at(-Math.PI / 2 + (i / SEG) * Math.PI, lon); e.push([...prev, ...c]); prev = c; }
+  }
+  for (let i = 1; i < LAT; i++) {
+    const lat = -Math.PI / 2 + (i / LAT) * Math.PI;
+    let prev = at(lat, 0);
+    for (let j = 1; j <= SEG; j++) { const c = at(lat, (j / SEG) * Math.PI * 2); e.push([...prev, ...c]); prev = c; }
+  }
+  return e;
+}
+
+/* ============================================================
+   LIVE TORII WAVE — gate points fixed, wave points animate
+   ============================================================ */
+const WAVE_BARS = 19, WAVE_YC = -0.1;
+let toriiGateN = 0;
+
+function waveHeight(bi, t) {
+  const x = -0.54 + (bi / (WAVE_BARS - 1)) * 1.08;
+  const env = 0.2 + 0.8 * Math.exp(-(x * x) / 0.16);
+  const rhythm = 0.45 + 0.55 * Math.abs(Math.sin(bi * 1.6 + 0.5 + t * 2.4));
+  return 0.42 * env * rhythm;
+}
+function toriiFillWave(out, n, t) {
+  const waveN = n - toriiGateN;
+  const perBar = Math.max(2, Math.ceil(waveN / WAVE_BARS));
+  for (let k = 0; k < waveN; k++) {
+    const bi = Math.min(WAVE_BARS - 1, Math.floor(k / perBar));
+    const x = -0.54 + (bi / (WAVE_BARS - 1)) * 1.08;
+    const local = ((k % perBar) / Math.max(1, perBar - 1)) * 2 - 1;
+    const o = (toriiGateN + k) * 2;
+    out[o] = x;
+    out[o + 1] = WAVE_YC + local * waveHeight(bi, t);
+  }
+}
+function toriiMk(n) {
+  toriiGateN = Math.round(n * 0.52);
+  const out = new Float32Array(n * 2);
+  out.set(samplePoints(toriiGateSegs(), toriiGateN), 0);
+  toriiFillWave(out, n, 0);
+  return out;
+}
+function toriiAnim(out, t, n) { toriiFillWave(out, n, t); }
+
+/* ============================================================
+   TEXT — the f74 monogram as strokes
+   ============================================================ */
+function f74Segs() {
+  const s = [];
+  const fx = -0.52;
+  s.push(...polylineSegs([[fx - 0.02, -0.42], [fx - 0.02, 0.30], [fx + 0.02, 0.40], [fx + 0.13, 0.44]]));
+  s.push(...polylineSegs([[fx - 0.16, 0.12], [fx + 0.14, 0.12]]));
+  const sx = 0.02;
+  s.push(...polylineSegs([[sx - 0.17, 0.42], [sx + 0.17, 0.42], [sx - 0.06, -0.42]]));
+  s.push(...polylineSegs([[sx - 0.13, 0.04], [sx + 0.05, 0.04]]));
+  const nx = 0.55;
+  s.push(...polylineSegs([[nx + 0.07, 0.44], [nx + 0.07, -0.42]]));
+  s.push(...polylineSegs([[nx + 0.07, 0.44], [nx - 0.19, -0.03], [nx + 0.21, -0.03]]));
+  return s;
+}
+
+/* ============================================================
+   L-SYSTEM — a deterministic bonsai with blossom clusters
+   ============================================================ */
+function bonsaiSegs() {
+  const s = [];
+  const grow = (x, y, ang, len, depth) => {
+    if (depth === 0 || len < 0.045) {
+      s.push(...circleSegs(x, y, 0.03, 8)); // blossom
+      return;
+    }
+    const nx = x + Math.cos(ang) * len, ny = y + Math.sin(ang) * len;
+    s.push([x, y, nx, ny]);
+    const spread = 0.4 + 0.05 * depth;
+    grow(nx, ny, ang + spread, len * 0.74, depth - 1);
+    grow(nx, ny, ang - spread * 0.82, len * 0.72, depth - 1);
+    if (depth % 2 === 0) grow(nx, ny, ang + 0.05, len * 0.58, depth - 1);
+  };
+  grow(0, -0.74, Math.PI / 2, 0.42, 5);
+  return s;
+}
+
+/* ============================================================
    PARTICLE ENGINE
    ============================================================ */
 
 const SHAPES = [
-  { gen: ringShape, label: "computational jewelry", sub: "parametric CAD · NURBS" },
-  { gen: toriiShape, label: "voice interfaces", sub: "wake word · STT · TTS" },
+  { ...make3D(diamondEdges, { spin: 0.5, tilt: 0.5, persp: 0.4 }), label: "computational jewelry", sub: "live 3D · NURBS" },
+  { mk: toriiMk, anim: toriiAnim, label: "voice interfaces", sub: "wake word · STT · TTS" },
   { gen: netShape, label: "applied AI", sub: "agents · tools · retrieval" },
-  { gen: dnaShape, label: "healthcare", sub: "clinical logic · data" },
+  { ...make3D(dnaEdges, { spin: 0.55, tilt: 0.12, persp: 0.3 }), label: "healthcare", sub: "clinical logic · data" },
   { gen: chainShape, label: "on-chain systems", sub: "tokens · terminals" },
   { gen: realEstateShape, label: "real-estate automation", sub: "ops · workflows" },
   { gen: mapShape, label: "maps & routing", sub: "geo · logistics" },
   { gen: qrShape, label: "phygital bridges", sub: "QR · scan-to-app" },
+  { ...make3D(torusKnotEdges, { spin: 0.7, tilt: 0.7, persp: 0.35 }), label: "generative geometry", sub: "parametric · 3D" },
+  { ...make3D(globeEdges, { spin: 0.35, tilt: 0.42, persp: 0.3 }), label: "global systems", sub: "distributed · realtime" },
+  { gen: f74Segs, label: "the signature", sub: "one person · whole loop" },
+  { gen: bonsaiSegs, label: "patient craft", sub: "grown, not generated" },
   { gen: fujiShape, label: "the long climb", sub: "focus · craft" },
   { gen: hiveShape, label: "product systems", sub: "zero to shipped" },
 ];
@@ -501,7 +671,7 @@ function layout() {
 
 function buildTargets() {
   const n = particleCount();
-  targets = SHAPES.map((s) => samplePoints(s.gen(), n));
+  targets = SHAPES.map((s) => (s.mk ? s.mk(n) : samplePoints(s.gen(), n)));
   while (particles.length < n) {
     particles.push({
       x: Math.random() * W,
@@ -525,13 +695,30 @@ function targetOf(i, t) {
   ];
 }
 
+/* Feature toggles — flip to false to roll back a single effect. */
+const FX = { links: true, vortex: true };
+
+let shownIdx = -1, morphT = 0;
+
 function drawFrame(t) {
   ctx.clearRect(0, 0, W, H);
+  const shape = SHAPES[shapeIdx];
+  if (shownIdx !== shapeIdx) { shownIdx = shapeIdx; morphT = t; }
+  // dynamic shapes rewrite their targets every frame (3D spin, live wave)
+  if (shape.anim && !reduced) shape.anim(targets[shapeIdx], t, particles.length);
+  // vortex: a decaying swirl each time a shape assembles
+  const swirl = (reduced || !FX.vortex) ? 0 : Math.max(0, 1 - (t - morphT) / 0.9);
+
   for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
     const [tx, ty] = targetOf(i, t);
     p.vx = (p.vx + (tx - p.x) * 0.045) * 0.86;
     p.vy = (p.vy + (ty - p.y) * 0.045) * 0.86;
+    if (swirl > 0) {
+      const dx = p.x - cx, dy = p.y - cy;
+      p.vx += (-dy * 0.011 - dx * 0.003) * swirl;
+      p.vy += (dx * 0.011 - dy * 0.003) * swirl;
+    }
     if (mouse) {
       const dx = p.x - mouse[0], dy = p.y - mouse[1];
       const d = Math.hypot(dx, dy);
@@ -552,6 +739,46 @@ function drawFrame(t) {
     ctx.fill();
   }
   ctx.globalAlpha = 1;
+  if (!reduced && FX.links) drawLinks();
+}
+
+/* Constellation: faint lines between nearby particles, via a spatial grid
+   so it stays cheap. Each particle links to at most a couple of neighbours. */
+function drawLinks() {
+  const R = 30, R2 = R * R, cell = R;
+  const key = (gx, gy) => (gx + 600) + (gy + 600) * 5000;
+  const grid = new Map();
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+    const k = key(Math.floor(p.x / cell), Math.floor(p.y / cell));
+    let arr = grid.get(k);
+    if (!arr) { arr = []; grid.set(k, arr); }
+    arr.push(i);
+  }
+  ctx.beginPath();
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+    const gx = Math.floor(p.x / cell), gy = Math.floor(p.y / cell);
+    let links = 0;
+    for (let oy = -1; oy <= 1 && links < 2; oy++) {
+      for (let ox = -1; ox <= 1 && links < 2; ox++) {
+        const arr = grid.get(key(gx + ox, gy + oy));
+        if (!arr) continue;
+        for (const j of arr) {
+          if (j <= i) continue;
+          const dx = p.x - particles[j].x, dy = p.y - particles[j].y;
+          if (dx * dx + dy * dy < R2) {
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            if (++links >= 2) break;
+          }
+        }
+      }
+    }
+  }
+  ctx.strokeStyle = "rgba(234, 231, 224, 0.10)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
 }
 
 /* Static render for reduced-motion users: particles sit on the shape. */
