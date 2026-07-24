@@ -612,6 +612,36 @@ function bonsaiSegs() {
 }
 
 /* ============================================================
+   PIKACHU — just for fun, built from a silhouette
+   ============================================================ */
+function pikachuSegs() {
+  const s = [];
+  // face
+  s.push(...circleSegs(0, -0.08, 0.48, 48));
+  // ears (closed triangles) + black-tip bands, doubled for density
+  s.push(...polylineSegs([[-0.12, 0.34], [-0.34, 0.26], [-0.5, 0.94]], true));
+  s.push(...polylineSegs([[0.12, 0.34], [0.34, 0.26], [0.5, 0.94]], true));
+  s.push(...polylineSegs([[-0.45, 0.66], [-0.5, 0.94], [-0.37, 0.71]], true));
+  s.push(...polylineSegs([[0.45, 0.66], [0.5, 0.94], [0.37, 0.71]], true));
+  // eyes (dense: outer + inner ring)
+  const eye = (x) => {
+    s.push(...circleSegs(x, 0.05, 0.09, 16));
+    s.push(...circleSegs(x, 0.05, 0.045, 10));
+  };
+  eye(-0.19); eye(0.19);
+  // nose + open smile
+  s.push(...polylineSegs([[-0.03, -0.05], [0.03, -0.05], [0, -0.1]], true));
+  s.push(...polylineSegs([[-0.13, -0.16], [-0.05, -0.25], [0.05, -0.25], [0.13, -0.16]]));
+  // cheeks (dense electric circles)
+  const cheek = (x) => {
+    s.push(...circleSegs(x, -0.14, 0.12, 18));
+    s.push(...circleSegs(x, -0.14, 0.06, 10));
+  };
+  cheek(-0.35); cheek(0.35);
+  return s;
+}
+
+/* ============================================================
    PARTICLE ENGINE
    ============================================================ */
 
@@ -629,6 +659,7 @@ const SHAPES = [
   { gen: f74Segs, label: "the signature", sub: "one person · whole loop" },
   { gen: bonsaiSegs, label: "patient craft", sub: "grown, not generated" },
   { gen: fujiShape, label: "the long climb", sub: "focus · craft" },
+  { gen: pikachuSegs, label: "pika pika", sub: "電気ねずみ · just for fun" },
   { gen: hiveShape, label: "product systems", sub: "zero to shipped" },
 ];
 
