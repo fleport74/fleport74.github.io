@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Filipp · AI / Product Engineer</title>
-  <meta name="description" content="Filipp (@fleport74): AI/Product Engineer. Voice copilots, parametric CAD engines, Telegram platforms, and the agent plumbing that makes them work.">
+  <meta name="description" content="Filipp (@fleport74): AI/Product Engineer. Voice copilots, parametric CAD engines, and the agent plumbing that makes them work.">
   <meta name="theme-color" content="#0a0b0e">
   <meta property="og:title" content="Filipp · AI / Product Engineer">
   <meta property="og:description" content="I build AI products end to end: voice copilots, computational geometry, agents in production.">
@@ -12,7 +12,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Hanken+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Hanken+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -27,7 +27,7 @@
     <div class="nav-status mono">
       <span class="dot" aria-hidden="true"></span>
       <span class="status-text">open to interesting problems</span>
-      <span id="clock" aria-label="current UTC time"></span>
+      <span id="clock" aria-label="current time"></span>
     </div>
   </header>
 
@@ -35,14 +35,16 @@
 
     <!-- ============ HERO ============ -->
     <section class="hero">
+      <div class="sun" aria-hidden="true"></div>
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <span class="v-label jp" lang="ja" aria-hidden="true">端から端まで</span>
       <div class="hero-inner">
-        <p class="eyebrow mono">~/filipp · <a href="https://github.com/fleport74">@fleport74</a></p>
+        <p class="eyebrow mono">~/filipp · <a href="https://github.com/fleport74">@fleport74</a>
+          <span class="jp eyebrow-jp" lang="ja">プロダクト・エンジニア</span></p>
         <h1>I build <em class="accent">AI&nbsp;products</em><br>end to end.</h1>
         <p class="lede">
-          Voice copilots, parametric CAD engines, Telegram platforms,
-          and the agent plumbing that makes them work.
-          From the first sketch to production.
+          Voice copilots, parametric CAD engines, and the agent plumbing
+          that makes them work. From the first sketch to production.
         </p>
         <div class="hero-cta">
           <a class="btn" href="#work">Selected work</a>
@@ -59,14 +61,15 @@
 
     <!-- ============ WORK ============ -->
     <section class="section" id="work">
+      <span class="kanji-mark" lang="ja" aria-hidden="true">作</span>
       <div class="section-head reveal">
-        <span class="section-path mono">~/work</span>
+        <span class="section-path mono">~/work · <span class="jp" lang="ja">作品</span></span>
         <h2>Selected work</h2>
         <p class="dim">Most of these live in private repos. Happy to walk through any of them.</p>
       </div>
       <div class="grid">
 
-        <article class="card reveal">
+        <article class="card reveal" data-hue="cyan">
           <span class="tag mono">voice ai</span>
           <h3>Jarvis</h3>
           <p>A local-first voice copilot: wake word, streaming Whisper STT, neural TTS,
@@ -75,7 +78,7 @@
           <p class="tech mono">Python · Faster-Whisper · Kokoro · MCP</p>
         </article>
 
-        <article class="card reveal">
+        <article class="card reveal" data-hue="gold">
           <span class="tag mono">computational geometry</span>
           <h3>Jewelry CAD engine</h3>
           <p>A parametric NURBS generator that turns a text spec into manufacturable
@@ -84,7 +87,7 @@
           <p class="tech mono">TypeScript · rhino3dm · manifold</p>
         </article>
 
-        <article class="card reveal">
+        <article class="card reveal" data-hue="violet">
           <span class="tag mono">product systems</span>
           <h3>Hive</h3>
           <p>A spatial team workspace: map-based rooms, chat, and projects with
@@ -92,7 +95,7 @@
           <p class="tech mono">Next.js · Supabase · TypeScript</p>
         </article>
 
-        <article class="card reveal">
+        <article class="card reveal" data-hue="shu">
           <span class="tag mono">client work</span>
           <h3>Production systems</h3>
           <p>Ongoing work for teams and clients, in daily production use.
@@ -106,31 +109,32 @@
 
     <!-- ============ APPROACH ============ -->
     <section class="section" id="approach">
+      <span class="kanji-mark" lang="ja" aria-hidden="true">道</span>
       <div class="section-head reveal">
-        <span class="section-path mono">~/approach</span>
+        <span class="section-path mono">~/approach · <span class="jp" lang="ja">流儀</span></span>
         <h2>How I work</h2>
       </div>
       <div class="principles">
         <div class="principle reveal">
-          <span class="mono p-slug">product/</span>
+          <span class="mono p-slug">product/ <span class="jp jp-gloss" lang="ja">形</span></span>
           <h3>Product before code</h3>
           <p>Every build starts from the user's sentence, not the stack.
              Ship the smallest thing that answers the real question, then iterate.</p>
         </div>
         <div class="principle reveal">
-          <span class="mono p-slug">agents/</span>
+          <span class="mono p-slug">agents/ <span class="jp jp-gloss" lang="ja">道具</span></span>
           <h3>Agents as infrastructure</h3>
           <p>LLMs are a runtime, not a feature: MCP servers, tool loops,
              voice in, structured actions out.</p>
         </div>
         <div class="principle reveal">
-          <span class="mono p-slug">verify/</span>
+          <span class="mono p-slug">verify/ <span class="jp jp-gloss" lang="ja">検証</span></span>
           <h3>Verified, not vibes</h3>
           <p>Hundreds of generated tests, adversarial review passes, numbers
              before screenshots. If it isn't checked, it isn't done.</p>
         </div>
         <div class="principle reveal">
-          <span class="mono p-slug">ship/</span>
+          <span class="mono p-slug">ship/ <span class="jp jp-gloss" lang="ja">出荷</span></span>
           <h3>End-to-end ownership</h3>
           <p>Figma to TypeScript to deploy. One person, whole loop:
              design, build, ship, operate.</p>
@@ -140,12 +144,14 @@
 
     <!-- ============ CONTACT ============ -->
     <section class="section contact" id="contact">
+      <span class="kanji-mark" lang="ja" aria-hidden="true">縁</span>
       <div class="section-head reveal">
-        <span class="section-path mono">~/contact</span>
+        <span class="section-path mono">~/contact · <span class="jp" lang="ja">連絡</span></span>
         <h2>Contact</h2>
       </div>
       <div class="reveal">
-        <p class="contact-line">Have an odd, ambitious product idea?<br>I like those.</p>
+        <p class="contact-line">Have an odd, ambitious product idea?<br>I like those.
+          <span class="jp jp-sub" lang="ja">面白いことを、一緒に。</span></p>
         <div class="hero-cta">
           <a class="btn" href="https://github.com/fleport74">GitHub → @fleport74</a>
           <button class="btn ghost mono" type="button" data-open-console>or type <kbd>/</kbd> and say hi</button>
@@ -157,7 +163,8 @@
 
   <footer class="footer mono">
     <span>no frameworks, no trackers. vanilla JS + one &lt;canvas&gt;</span>
-    <span>© 2026 · built by me &amp; my agents</span>
+    <span class="footer-right">© 2026 · built by me &amp; my agents
+      <span class="hanko jp" lang="ja" title="takumi: craftsman">匠</span></span>
   </footer>
 
   <!-- ============ CONSOLE ============ -->

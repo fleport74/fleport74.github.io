@@ -2,6 +2,7 @@
    sheet. Also owns the accent theme (CSS vars + localStorage). */
 
 const ACCENTS = {
+  shu: "#ff5348",
   gold: "#d8a94f",
   cyan: "#58c4dc",
   violet: "#a78bfa",
@@ -65,7 +66,7 @@ const COMMANDS = {
       "projects      selected work, one line each",
       "stack         tools I reach for",
       "contact       how to reach me",
-      "accent <c>    theme: gold | cyan | violet | mint",
+      "accent <c>    theme: shu | gold | cyan | violet | mint",
       "ring          craft demo",
       "goto <id>     scroll to: work | approach | contact",
       "clear         wipe output",
@@ -105,7 +106,7 @@ Repos are mostly private; ask for a walkthrough.`,
     if (applyAccent(arg)) {
       return `<span class="out-ok">accent set: ${arg}</span>`;
     }
-    return `usage: accent &lt;gold | cyan | violet | mint&gt;`;
+    return `usage: accent &lt;shu | gold | cyan | violet | mint&gt;`;
   },
 
   goto: (arg) => {
@@ -173,7 +174,7 @@ export function openConsole() {
     greeted = true;
     print(
       `<span class="out-accent">fleport74.github.io</span> · interactive console
-type 'help' for commands. Esc closes.`
+<span lang="ja">ようこそ。</span> type 'help' for commands. Esc closes.`
     );
   }
   setTimeout(() => input.focus(), 120);

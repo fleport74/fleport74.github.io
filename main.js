@@ -11,8 +11,10 @@ const clockEl = document.getElementById("clock");
 function tickClock() {
   const d = new Date();
   const p = (n) => String(n).padStart(2, "0");
+  const jstH = (d.getUTCHours() + 9) % 24;
   clockEl.textContent =
-    `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())} UTC`;
+    `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())} UTC` +
+    ` · ${p(jstH)}:${p(d.getUTCMinutes())} JST`;
 }
 tickClock();
 setInterval(tickClock, 1000);
@@ -203,9 +205,12 @@ let particles = [];
 let targets = []; // one Float32Array per shape
 let shapeIdx = 0;
 let mouse = null;
-let accentColor = getAccent();
+/* colored particles draw from a small palette: accent + cyan + violet */
+const cssVar = (n) =>
+  getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const palette = [getAccent(), cssVar("--cyan"), cssVar("--violet")];
 
-addEventListener("accentchange", () => (accentColor = getAccent()));
+addEventListener("accentchange", () => (palette[0] = getAccent()));
 
 function particleCount() {
   return Math.max(340, Math.min(900, Math.floor((W * H) / 1600)));
@@ -234,7 +239,7 @@ function buildTargets() {
       y: Math.random() * H,
       vx: 0, vy: 0,
       phase: Math.random() * Math.PI * 2,
-      accent: Math.random() < 0.11,
+      hue: Math.random() < 0.16 ? Math.floor(Math.random() * 3) : -1,
       size: 1.4 + Math.random() * 1.1,
     });
   }
@@ -269,9 +274,10 @@ function drawFrame(t) {
     }
     p.x += p.vx;
     p.y += p.vy;
-    ctx.globalAlpha = p.accent ? 0.95 : 0.65;
-    ctx.fillStyle = p.accent ? accentColor : "#e6e2d6";
-    const s = p.accent ? p.size + 0.9 : p.size;
+    const colored = p.hue >= 0;
+    ctx.globalAlpha = colored ? 0.95 : 0.65;
+    ctx.fillStyle = colored ? palette[p.hue] : "#e6e2d6";
+    const s = colored ? p.size + 0.9 : p.size;
     ctx.beginPath();
     ctx.arc(p.x, p.y, s, 0, Math.PI * 2);
     ctx.fill();
