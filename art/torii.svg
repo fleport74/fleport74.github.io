@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 360" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff5348" stop-opacity="0.5"/>
+      <stop offset="55%" stop-color="#ff5348" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#ff5348" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0b0e"/>
+      <stop offset="100%" stop-color="#130b0e"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="360" fill="url(#sky)"/>
+
+  <!-- rising sun -->
+  <circle cx="980" cy="180" r="150" fill="url(#sun)"/>
+  <circle cx="980" cy="180" r="78" fill="#ff5348" opacity="0.16"/>
+  <circle cx="980" cy="180" r="78" fill="none" stroke="#ff5348" stroke-width="1.5" opacity="0.55" filter="url(#glow)"/>
+
+  <!-- power cables + drones -->
+  <path d="M0,60 C200,95 380,70 560,88" fill="none" stroke="#1a1c22" stroke-width="1"/>
+  <path d="M0,40 C260,80 460,50 700,72" fill="none" stroke="#1a1c22" stroke-width="1"/>
+  <circle cx="300" cy="78" r="2.5" fill="#b18cff" opacity="0.8" filter="url(#glow)"/>
+  <circle cx="520" cy="84" r="2" fill="#5bd7ff" opacity="0.8" filter="url(#glow)"/>
+
+  <!-- mountains -->
+  <path d="M0,215 L120,180 L260,210 L420,170 L560,205 L700,185 L840,208 L1000,180 L1160,205 L1300,185 L1440,205 L1440,360 L0,360 Z" fill="#0d0e12"/>
+  <path d="M0,215 L120,180 L260,210 L420,170 L560,205 L700,185 L840,208 L1000,180 L1160,205 L1300,185 L1440,205" fill="none" stroke="#5bd7ff" stroke-width="1" opacity="0.22"/>
+  <path d="M0,250 L200,225 L380,248 L600,230 L820,250 L1040,232 L1240,250 L1440,238 L1440,360 L0,360 Z" fill="#0b0c10"/>
+
+  <!-- pagoda -->
+  <g fill="#0a0b0f">
+    <rect x="214" y="240" width="72" height="22"/>
+    <polygon points="196,240 304,240 292,226 208,226"/>
+    <rect x="222" y="208" width="56" height="18"/>
+    <polygon points="204,208 296,208 286,196 214,196"/>
+    <rect x="228" y="178" width="44" height="18"/>
+    <polygon points="212,178 288,178 279,166 221,166"/>
+    <rect x="234" y="150" width="32" height="16"/>
+    <polygon points="220,150 280,150 272,138 228,138"/>
+    <polygon points="232,138 268,138 262,128 238,128"/>
+  </g>
+  <line x1="250" y1="128" x2="250" y2="98" stroke="#0f1014" stroke-width="3"/>
+  <circle cx="250" cy="94" r="3" fill="#b18cff" opacity="0.85" filter="url(#glow)"/>
+
+  <!-- water -->
+  <rect x="0" y="262" width="1440" height="98" fill="#08090c"/>
+  <g stroke-linecap="round">
+    <line x1="930" y1="272" x2="1020" y2="272" stroke="#ff5348" stroke-width="2.5" opacity="0.30"/>
+    <line x1="905" y1="282" x2="1035" y2="282" stroke="#ff5348" stroke-width="2.5" opacity="0.22"/>
+    <line x1="945" y1="294" x2="1015" y2="294" stroke="#ff5348" stroke-width="2.5" opacity="0.16"/>
+    <line x1="915" y1="308" x2="1030" y2="308" stroke="#ff5348" stroke-width="2.5" opacity="0.10"/>
+    <line x1="955" y1="322" x2="1005" y2="322" stroke="#ff5348" stroke-width="2.5" opacity="0.07"/>
+    <line x1="380" y1="285" x2="460" y2="285" stroke="#5bd7ff" stroke-width="2" opacity="0.12"/>
+    <line x1="402" y1="300" x2="446" y2="300" stroke="#5bd7ff" stroke-width="2" opacity="0.08"/>
+  </g>
+
+  <!-- seigaiha wave arcs -->
+  <g fill="none" stroke="#eae7e0" opacity="0.05">
+    <path d="M80,332 A40,40 0 0 1 160,332"/>
+    <path d="M90,332 A30,30 0 0 1 150,332"/>
+    <path d="M100,332 A20,20 0 0 1 140,332"/>
+    <path d="M160,348 A40,40 0 0 1 240,348"/>
+    <path d="M170,348 A30,30 0 0 1 230,348"/>
+    <path d="M20,352 A40,40 0 0 1 100,352"/>
+    <path d="M1240,340 A40,40 0 0 1 1320,340"/>
+    <path d="M1250,340 A30,30 0 0 1 1310,340"/>
+    <path d="M1320,352 A40,40 0 0 1 1400,352"/>
+  </g>
+
+  <!-- torii reflection -->
+  <g opacity="0.10" transform="translate(0,536) scale(1,-1)">
+    <polygon points="544,150 560,150 566,268 550,268" fill="#ff5348"/>
+    <polygon points="680,150 696,150 690,268 674,268" fill="#ff5348"/>
+    <path d="M496,132 Q620,110 744,132 L744,144 Q620,122 496,144 Z" fill="#ff5348"/>
+  </g>
+
+  <!-- torii gate -->
+  <g fill="#08090b" stroke="#ff5348" stroke-opacity="0.55" stroke-width="1.2">
+    <polygon points="544,150 560,150 566,268 550,268"/>
+    <polygon points="680,150 696,150 690,268 674,268"/>
+    <path d="M496,132 Q620,110 744,132 L744,144 Q620,122 496,144 Z"/>
+    <polygon points="516,146 724,146 724,156 516,156"/>
+    <polygon points="530,190 710,190 710,202 530,202"/>
+    <rect x="610" y="156" width="20" height="30"/>
+  </g>
+  <rect x="614" y="160" width="12" height="22" fill="#ff5348" opacity="0.3" filter="url(#glow)"/>
+
+  <!-- hanging lanterns -->
+  <line x1="580" y1="202" x2="580" y2="212" stroke="#1a1c22" stroke-width="1"/>
+  <rect x="574" y="212" width="12" height="16" rx="4" fill="#ff5348" opacity="0.5" filter="url(#glow)"/>
+  <line x1="660" y1="202" x2="660" y2="212" stroke="#1a1c22" stroke-width="1"/>
+  <rect x="654" y="212" width="12" height="16" rx="4" fill="#f2bd5a" opacity="0.5" filter="url(#glow)"/>
+
+  <!-- fireflies -->
+  <g filter="url(#glow)">
+    <circle cx="150" cy="120" r="2" fill="#5bd7ff" opacity="0.5"/>
+    <circle cx="340" cy="150" r="2" fill="#ff5348" opacity="0.45"/>
+    <circle cx="760" cy="120" r="2.5" fill="#b18cff" opacity="0.5"/>
+    <circle cx="880" cy="240" r="2" fill="#5bd7ff" opacity="0.35"/>
+    <circle cx="1120" cy="150" r="2" fill="#ff5348" opacity="0.4"/>
+    <circle cx="1250" cy="120" r="2" fill="#b18cff" opacity="0.45"/>
+    <circle cx="1390" cy="180" r="2" fill="#5bd7ff" opacity="0.35"/>
+    <circle cx="1060" cy="90" r="2" fill="#ff5348" opacity="0.3"/>
+    <circle cx="450" cy="110" r="2" fill="#f2bd5a" opacity="0.4"/>
+  </g>
+</svg>

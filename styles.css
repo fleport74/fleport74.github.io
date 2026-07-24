@@ -193,6 +193,21 @@ kbd {
   pointer-events: none;
 }
 
+/* cyberpunk-temple skyline along the hero horizon */
+.hero-skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 240px;
+  z-index: 1;
+  background: url("art/skyline.svg") bottom center / cover no-repeat;
+  opacity: 0.55;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(transparent, #000 40%);
+  mask-image: linear-gradient(transparent, #000 40%);
+}
+
 #hero-canvas {
   position: absolute;
   inset: 0;
@@ -249,9 +264,24 @@ h1 em.accent {
 
 .lede {
   margin-top: 1.6rem;
-  max-width: 470px;
+  max-width: 490px;
   color: var(--dim);
   font-size: 1.05rem;
+}
+
+/* domain chips: quick colorful scan of what I do */
+.domains {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.chip {
+  color: var(--hue, var(--accent));
+  background: var(--hue-soft, var(--accent-soft));
+  padding: 0.22em 0.75em;
+  border-radius: 999px;
+  font-size: 0.72rem;
 }
 
 .hero-cta {
@@ -262,39 +292,47 @@ h1 em.accent {
   align-items: center;
 }
 
+/* primary: filled hinomaru red; inverts to outline on hover */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.55em;
   font-family: var(--font-body);
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--accent);
-  background: transparent;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: #0a0b0e;
+  background: var(--accent);
   border: 1px solid var(--accent);
-  border-radius: 4px;
-  padding: 0.65em 1.3em;
+  border-radius: 6px;
+  padding: 0.7em 1.5em;
   cursor: pointer;
   transition: background 0.25s, color 0.25s, border-color 0.25s,
               transform 0.25s, box-shadow 0.25s;
 }
 .btn:hover {
-  background: var(--accent);
-  color: #0a0b0e;
+  background: transparent;
+  color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px var(--accent-soft);
+  box-shadow: 0 8px 24px var(--accent-soft);
 }
-.btn:hover kbd { color: #0a0b0e; border-color: rgba(10,11,14,0.4); }
+
+.btn .arr {
+  display: inline-block;
+  transition: transform 0.25s;
+}
+.btn:hover .arr { transform: translateY(3px); }
 
 .btn.ghost {
+  font-weight: 400;
   color: var(--dim);
+  background: transparent;
   border-color: var(--hairline);
 }
 .btn.ghost:hover {
-  background: transparent;
   color: var(--text);
-  border-color: var(--dim);
+  border-color: var(--accent);
   box-shadow: none;
+  transform: translateY(-2px);
 }
 .btn.ghost:hover kbd { color: var(--text); border-color: var(--dim); }
 
@@ -378,6 +416,12 @@ h2 {
   .grid { grid-template-columns: 1fr; }
 }
 
+/* hue mapping shared by cards, chips, and any [data-hue] element */
+[data-hue="cyan"] { --hue: var(--cyan); --hue-soft: var(--cyan-soft); }
+[data-hue="gold"] { --hue: var(--gold); --hue-soft: var(--gold-soft); }
+[data-hue="violet"] { --hue: var(--violet); --hue-soft: var(--violet-soft); }
+[data-hue="shu"] { --hue: var(--accent); --hue-soft: var(--accent-soft); }
+
 .card {
   position: relative;
   background: var(--bg);
@@ -387,10 +431,6 @@ h2 {
   --hue: var(--accent);
   --hue-soft: var(--accent-soft);
 }
-.card[data-hue="cyan"] { --hue: var(--cyan); --hue-soft: var(--cyan-soft); }
-.card[data-hue="gold"] { --hue: var(--gold); --hue-soft: var(--gold-soft); }
-.card[data-hue="violet"] { --hue: var(--violet); --hue-soft: var(--violet-soft); }
-.card[data-hue="shu"] { --hue: var(--accent); --hue-soft: var(--accent-soft); }
 
 .card:hover { transform: translateY(-3px) rotate(-0.4deg); }
 
@@ -445,10 +485,40 @@ h2 {
 .card p { color: var(--dim); font-size: 0.95rem; }
 
 .card .tech {
-  margin-top: 1.1rem;
+  margin-top: 1.2rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--hairline);
   color: var(--text);
   opacity: 0.75;
 }
+
+/* ---------- interlude: torii scene ---------- */
+.interlude {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.9rem;
+  min-height: 380px;
+  padding: 3rem clamp(1.5rem, 7vw, 6rem) 3rem 1.5rem;
+  text-align: right;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  background: url("art/torii.svg") center / cover no-repeat, var(--bg);
+  overflow: hidden;
+}
+
+.interlude-quote {
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+  color: var(--text);
+  text-shadow: 0 0 26px rgba(255, 83, 72, 0.4);
+}
+
+.interlude-gloss { color: var(--dim); }
 
 /* ---------- principles ---------- */
 .principles {
@@ -456,6 +526,14 @@ h2 {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2.4rem 3rem;
 }
+
+.principle {
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--accent);
+}
+.principle:nth-child(2) { border-left-color: var(--cyan); }
+.principle:nth-child(3) { border-left-color: var(--violet); }
+.principle:nth-child(4) { border-left-color: var(--gold); }
 
 .p-slug { color: var(--accent); }
 .principle:nth-child(2) .p-slug { color: var(--cyan); }
@@ -647,4 +725,9 @@ h2 {
     text-align: left;
     bottom: 1.4rem;
   }
+
+  .hero-skyline { opacity: 0.3; height: 180px; }
+
+  .interlude { min-height: 280px; }
+  .interlude-quote { letter-spacing: 0.2em; text-indent: 0.2em; }
 }

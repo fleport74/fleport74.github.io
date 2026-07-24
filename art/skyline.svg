@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <filter id="g" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- power line -->
+  <path d="M0,110 C300,150 500,90 760,120 S1200,130 1440,100" fill="none" stroke="#16181f" stroke-width="1"/>
+
+  <!-- city blocks -->
+  <g fill="#0d0e12">
+    <rect x="0" y="180" width="90" height="60"/>
+    <rect x="90" y="145" width="60" height="95"/>
+    <rect x="150" y="200" width="80" height="40"/>
+    <rect x="230" y="165" width="90" height="75"/>
+    <rect x="320" y="190" width="80" height="50"/>
+    <rect x="400" y="130" width="70" height="110"/>
+    <rect x="470" y="175" width="90" height="65"/>
+    <rect x="560" y="155" width="90" height="85"/>
+    <rect x="650" y="195" width="70" height="45"/>
+    <rect x="720" y="140" width="100" height="100"/>
+    <rect x="820" y="180" width="80" height="60"/>
+    <rect x="900" y="160" width="80" height="80"/>
+    <rect x="980" y="185" width="100" height="55"/>
+    <rect x="1080" y="120" width="80" height="120"/>
+    <rect x="1160" y="170" width="80" height="70"/>
+    <rect x="1240" y="190" width="70" height="50"/>
+    <rect x="1310" y="155" width="130" height="85"/>
+  </g>
+
+  <!-- pagoda -->
+  <g fill="#0f1014">
+    <rect x="164" y="178" width="52" height="22"/>
+    <polygon points="150,178 230,178 221,166 159,166"/>
+    <rect x="170" y="148" width="40" height="18"/>
+    <polygon points="156,148 224,148 216,138 164,138"/>
+    <rect x="176" y="122" width="28" height="16"/>
+    <polygon points="164,122 216,122 210,112 170,112"/>
+    <polygon points="172,112 208,112 203,103 177,103"/>
+  </g>
+  <line x1="190" y1="103" x2="190" y2="80" stroke="#12131a" stroke-width="2.5"/>
+  <circle cx="190" cy="77" r="2.5" fill="#b18cff" opacity="0.8" filter="url(#g)"/>
+
+  <!-- antennas -->
+  <line x1="435" y1="130" x2="435" y2="100" stroke="#12131a" stroke-width="2"/>
+  <circle cx="435" cy="97" r="2.5" fill="#ff5348" opacity="0.8" filter="url(#g)"/>
+  <line x1="770" y1="140" x2="770" y2="95" stroke="#12131a" stroke-width="2"/>
+  <circle cx="770" cy="92" r="2.5" fill="#5bd7ff" opacity="0.8" filter="url(#g)"/>
+  <line x1="1120" y1="120" x2="1120" y2="88" stroke="#12131a" stroke-width="2"/>
+  <circle cx="1120" cy="85" r="2.5" fill="#ff5348" opacity="0.7" filter="url(#g)"/>
+
+  <!-- small torii on the right -->
+  <g fill="#101116">
+    <rect x="1318" y="190" width="7" height="50"/>
+    <rect x="1349" y="190" width="7" height="50"/>
+    <rect x="1305" y="182" width="66" height="7"/>
+    <rect x="1311" y="192" width="54" height="4"/>
+    <rect x="1313" y="205" width="48" height="5"/>
+  </g>
+
+  <!-- lit windows -->
+  <g opacity="0.55">
+    <rect x="412" y="150" width="3" height="4" fill="#5bd7ff"/>
+    <rect x="430" y="170" width="3" height="4" fill="#f2bd5a"/>
+    <rect x="448" y="158" width="3" height="4" fill="#ff5348"/>
+    <rect x="580" y="175" width="3" height="4" fill="#5bd7ff"/>
+    <rect x="610" y="190" width="3" height="4" fill="#f2bd5a"/>
+    <rect x="740" y="160" width="3" height="4" fill="#5bd7ff"/>
+    <rect x="765" y="185" width="3" height="4" fill="#ff5348"/>
+    <rect x="790" y="172" width="3" height="4" fill="#f2bd5a"/>
+    <rect x="925" y="178" width="3" height="4" fill="#5bd7ff"/>
+    <rect x="1098" y="140" width="3" height="4" fill="#ff5348"/>
+    <rect x="1122" y="165" width="3" height="4" fill="#5bd7ff"/>
+    <rect x="1140" y="150" width="3" height="4" fill="#f2bd5a"/>
+    <rect x="1345" y="170" width="3" height="4" fill="#5bd7ff"/>
+    <rect x="1390" y="185" width="3" height="4" fill="#ff5348"/>
+  </g>
+</svg>
