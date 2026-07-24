@@ -218,49 +218,117 @@ function ringShape() {
   return segs;
 }
 
-/* Audio waveform: vertical bars, gaussian envelope, rhythmic heights. */
-function waveShape() {
+/* Torii gate framing a voice waveform: the temple gate is the frame,
+   the sound wave lives in the opening. */
+function toriiShape() {
   const segs = [];
-  const bars = 24;
+  // two pillars
+  segs.push(...polylineSegs([[-0.5, -0.8], [-0.5, 0.55]]));
+  segs.push(...polylineSegs([[0.5, -0.8], [0.5, 0.55]]));
+  // kasagi (curved top lintel) + shimaki (parallel bar below it)
+  segs.push(...polylineSegs([[-0.84, 0.56], [-0.4, 0.66], [0, 0.69], [0.4, 0.66], [0.84, 0.56]]));
+  segs.push(...polylineSegs([[-0.8, 0.49], [0, 0.51], [0.8, 0.49]]));
+  // nuki (through beam) + gakuzuka (central tablet)
+  segs.push(...polylineSegs([[-0.63, 0.34], [0.63, 0.34]]));
+  segs.push(...polylineSegs([[-0.07, 0.34], [0.07, 0.34], [0.07, 0.5], [-0.07, 0.5]], true));
+  // voice waveform inside the gate
+  const bars = 11, yc = -0.16;
   for (let i = 0; i < bars; i++) {
-    const x = -0.85 + (i / (bars - 1)) * 1.7;
-    const envelope = 0.18 + 0.82 * Math.exp(-(x * x) / 0.3);
-    const rhythm = 0.45 + 0.55 * Math.abs(Math.sin(i * 1.7 + 0.6));
-    const h = 0.78 * envelope * rhythm;
-    segs.push([x, -h, x, h]);
+    const x = -0.4 + (i / (bars - 1)) * 0.8;
+    const env = 0.28 + 0.72 * Math.exp(-(x * x) / 0.14);
+    const rhythm = 0.5 + 0.5 * Math.abs(Math.sin(i * 1.7 + 0.6));
+    const h = 0.3 * env * rhythm;
+    segs.push([x, yc - h, x, yc + h]);
   }
   return segs;
 }
 
-/* Small feed-forward network: node rings + a sampled subset of edges. */
+/* Clean feed-forward network: 3 symmetric layers, fully-connected edges,
+   prominent double-ring nodes. */
 function netShape() {
   const layers = [
-    { x: -0.72, n: 4 },
-    { x: -0.26, n: 6 },
-    { x: 0.26, n: 6 },
-    { x: 0.72, n: 3 },
+    { x: -0.7, n: 3 },
+    { x: 0, n: 4 },
+    { x: 0.7, n: 3 },
   ];
+  const H = 1.12;
   const nodes = layers.map((l) =>
-    Array.from({ length: l.n }, (_, j) => [
-      l.x,
-      ((j + 0.5) / l.n - 0.5) * 1.3,
-    ])
+    Array.from({ length: l.n }, (_, j) => [l.x, ((j + 0.5) / l.n - 0.5) * H])
   );
   const segs = [];
+  // fully-connected edges — regular, so the graph reads clean
   for (let li = 0; li < nodes.length - 1; li++) {
-    for (let i = 0; i < nodes[li].length; i++) {
-      for (let j = 0; j < nodes[li + 1].length; j++) {
-        if ((i * 3 + j * 5 + li * 7) % 10 < 4) {
-          segs.push([...nodes[li][i], ...nodes[li + 1][j]]);
-        }
+    for (const a of nodes[li]) {
+      for (const b of nodes[li + 1]) {
+        segs.push([a[0], a[1], b[0], b[1]]);
       }
     }
   }
+  // double-ring nodes: outer + inner so they read as solid dots, not gaps
   for (const layer of nodes) {
     for (const [x, y] of layer) {
-      const ring = circleSegs(x, y, 0.05, 10);
-      segs.push(...ring, ...ring); // doubled: nodes read denser than edges
+      segs.push(...circleSegs(x, y, 0.08, 16));
+      segs.push(...circleSegs(x, y, 0.035, 8));
     }
+  }
+  return segs;
+}
+
+/* Healthcare: heart outline with an ECG pulse across it. */
+function heartShape() {
+  const segs = [];
+  const pts = [];
+  const steps = 64;
+  for (let i = 0; i <= steps; i++) {
+    const t = (i / steps) * Math.PI * 2;
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y =
+      13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    pts.push([x * 0.04, y * 0.04 + 0.08]);
+  }
+  segs.push(...polylineSegs(pts, true));
+  segs.push(
+    ...polylineSegs([
+      [-0.5, -0.02], [-0.26, -0.02], [-0.16, 0.02], [-0.07, 0.3],
+      [0.01, -0.24], [0.09, 0.05], [0.19, 0.05], [0.28, -0.02], [0.5, -0.02],
+    ])
+  );
+  return segs;
+}
+
+/* Blockchain: three linked blocks, each stamped with a diamond glyph. */
+function blockchainShape() {
+  const segs = [];
+  const h = 0.15;
+  const centers = [[-0.52, 0.22], [0, 0], [0.52, -0.22]];
+  for (const [cx, cy] of centers) {
+    segs.push(...polylineSegs(
+      [[cx - h, cy - h], [cx + h, cy - h], [cx + h, cy + h], [cx - h, cy + h]], true));
+    segs.push(...polylineSegs(
+      [[cx, cy - h * 0.5], [cx + h * 0.5, cy], [cx, cy + h * 0.5], [cx - h * 0.5, cy]], true));
+  }
+  for (let i = 0; i < centers.length - 1; i++) {
+    const [ax, ay] = centers[i], [bx, by] = centers[i + 1];
+    segs.push(...polylineSegs([[ax + h, ay - h * 0.25], [bx - h, by + h * 0.25]]));
+    segs.push(...polylineSegs([[ax + h, ay + h * 0.25], [bx - h, by - h * 0.25]]));
+  }
+  return segs;
+}
+
+/* Real-estate automation: a house with a gear at its heart. */
+function realEstateShape() {
+  const segs = [];
+  segs.push(...polylineSegs([[-0.42, -0.5], [-0.42, 0.12], [0.42, 0.12], [0.42, -0.5]]));
+  segs.push(...polylineSegs([[-0.54, 0.12], [0, 0.54], [0.54, 0.12]]));
+  const gx = 0, gy = -0.16, r = 0.17, teeth = 8;
+  segs.push(...circleSegs(gx, gy, r, 22));
+  segs.push(...circleSegs(gx, gy, r * 0.42, 10));
+  for (let i = 0; i < teeth; i++) {
+    const a = (i / teeth) * Math.PI * 2;
+    segs.push([
+      gx + r * Math.cos(a), gy + r * Math.sin(a),
+      gx + (r + 0.07) * Math.cos(a), gy + (r + 0.07) * Math.sin(a),
+    ]);
   }
   return segs;
 }
@@ -308,8 +376,11 @@ function samplePoints(segs, count) {
 
 const SHAPES = [
   { gen: ringShape, label: "computational jewelry", sub: "parametric CAD · NURBS" },
-  { gen: waveShape, label: "voice interfaces", sub: "wake word · STT · TTS" },
+  { gen: toriiShape, label: "voice interfaces", sub: "wake word · STT · TTS" },
   { gen: netShape, label: "applied AI", sub: "agents · tools · retrieval" },
+  { gen: heartShape, label: "healthcare", sub: "clinical logic · rules" },
+  { gen: blockchainShape, label: "on-chain systems", sub: "tokens · terminals" },
+  { gen: realEstateShape, label: "real-estate automation", sub: "ops · workflows" },
   { gen: hiveShape, label: "product systems", sub: "zero to shipped" },
 ];
 
