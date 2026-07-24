@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <filter id="lg" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#cfeaff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#cfeaff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- moon -->
+  <circle cx="1180" cy="80" r="95" fill="url(#moonGlow)"/>
+  <circle cx="1180" cy="80" r="36" fill="#dff1ff" opacity="0.85"/>
+  <circle cx="1168" cy="70" r="7" fill="#b9d8ec" opacity="0.5"/>
+  <circle cx="1192" cy="92" r="5" fill="#b9d8ec" opacity="0.45"/>
+  <circle cx="1188" cy="66" r="3.5" fill="#b9d8ec" opacity="0.4"/>
+
+  <!-- distant hill with a small torii -->
+  <path d="M0,240 L160,200 L340,238 L520,222 L700,244 L900,230 L1100,246 L1300,234 L1440,244 L1440,300 L0,300 Z" fill="#0c0d12"/>
+  <g fill="#141720" stroke="#ff3355" stroke-opacity="0.45" stroke-width="1">
+    <rect x="150" y="176" width="5" height="26"/>
+    <rect x="172" y="176" width="5" height="26"/>
+    <rect x="141" y="170" width="46" height="5"/>
+    <rect x="147" y="184" width="34" height="4"/>
+  </g>
+
+  <!-- water -->
+  <rect x="0" y="244" width="1440" height="56" fill="#08090c"/>
+  <g stroke-linecap="round" stroke-width="2">
+    <line x1="1140" y1="256" x2="1225" y2="256" stroke="#dff1ff" opacity="0.18"/>
+    <line x1="1155" y1="268" x2="1210" y2="268" stroke="#dff1ff" opacity="0.12"/>
+    <line x1="1165" y1="282" x2="1200" y2="282" stroke="#dff1ff" opacity="0.07"/>
+    <line x1="330" y1="258" x2="395" y2="258" stroke="#ff3355" opacity="0.2"/>
+    <line x1="345" y1="272" x2="382" y2="272" stroke="#ff3355" opacity="0.12"/>
+    <line x1="600" y1="262" x2="655" y2="262" stroke="#f2bd5a" opacity="0.16"/>
+    <line x1="615" y1="276" x2="645" y2="276" stroke="#f2bd5a" opacity="0.09"/>
+    <line x1="880" y1="260" x2="925" y2="260" stroke="#5bd7ff" opacity="0.14"/>
+  </g>
+
+  <!-- rising sky lanterns -->
+  <!-- big crimson -->
+  <g transform="rotate(-4 360 160)" filter="url(#lg)">
+    <rect x="338" y="120" width="44" height="58" rx="18" fill="#ff3355" opacity="0.5"/>
+    <path d="M340,138 Q360,144 380,138" stroke="#ffd9e0" stroke-width="1.2" fill="none" opacity="0.5"/>
+    <path d="M339,156 Q360,162 381,156" stroke="#ffd9e0" stroke-width="1.2" fill="none" opacity="0.4"/>
+    <rect x="348" y="114" width="24" height="6" rx="2" fill="#ff3355" opacity="0.7"/>
+    <rect x="348" y="178" width="24" height="5" rx="2" fill="#ff3355" opacity="0.7"/>
+    <line x1="360" y1="183" x2="360" y2="196" stroke="#ff3355" stroke-width="1.5" opacity="0.6"/>
+    <circle cx="360" cy="148" r="7" fill="#ffe9a6" opacity="0.9"/>
+  </g>
+  <!-- gold -->
+  <g transform="rotate(3 640 120)" filter="url(#lg)">
+    <rect x="622" y="88" width="36" height="48" rx="15" fill="#f2bd5a" opacity="0.5"/>
+    <path d="M624,104 Q640,109 656,104" stroke="#fff2cf" stroke-width="1.2" fill="none" opacity="0.5"/>
+    <path d="M623,118 Q640,123 657,118" stroke="#fff2cf" stroke-width="1.2" fill="none" opacity="0.4"/>
+    <rect x="630" y="83" width="20" height="5" rx="2" fill="#f2bd5a" opacity="0.7"/>
+    <rect x="630" y="136" width="20" height="4" rx="2" fill="#f2bd5a" opacity="0.7"/>
+    <line x1="640" y1="140" x2="640" y2="150" stroke="#f2bd5a" stroke-width="1.5" opacity="0.6"/>
+    <circle cx="640" cy="110" r="6" fill="#fff3c9" opacity="0.9"/>
+  </g>
+  <!-- small crimson high -->
+  <g transform="rotate(-6 520 60)" filter="url(#lg)">
+    <rect x="508" y="40" width="24" height="32" rx="10" fill="#ff3355" opacity="0.4"/>
+    <rect x="513" y="36" width="14" height="4" rx="2" fill="#ff3355" opacity="0.6"/>
+    <circle cx="520" cy="55" r="4" fill="#ffe9a6" opacity="0.85"/>
+  </g>
+  <!-- cyan -->
+  <g transform="rotate(5 900 150)" filter="url(#lg)">
+    <rect x="884" y="120" width="32" height="42" rx="13" fill="#5bd7ff" opacity="0.45"/>
+    <path d="M886,134 Q900,139 914,134" stroke="#dff6ff" stroke-width="1.2" fill="none" opacity="0.5"/>
+    <rect x="891" y="115" width="18" height="5" rx="2" fill="#5bd7ff" opacity="0.65"/>
+    <rect x="891" y="162" width="18" height="4" rx="2" fill="#5bd7ff" opacity="0.65"/>
+    <circle cx="900" cy="139" r="5" fill="#eaffff" opacity="0.9"/>
+  </g>
+  <!-- violet small -->
+  <g transform="rotate(-3 1050 100)" filter="url(#lg)">
+    <rect x="1038" y="80" width="24" height="30" rx="10" fill="#b18cff" opacity="0.4"/>
+    <rect x="1043" y="76" width="14" height="4" rx="2" fill="#b18cff" opacity="0.6"/>
+    <circle cx="1050" cy="94" r="4" fill="#f1e8ff" opacity="0.85"/>
+  </g>
+  <!-- tiny far lanterns -->
+  <circle cx="240" cy="70" r="3.5" fill="#ff3355" opacity="0.5" filter="url(#lg)"/>
+  <circle cx="770" cy="50" r="3" fill="#f2bd5a" opacity="0.5" filter="url(#lg)"/>
+  <circle cx="960" cy="36" r="2.5" fill="#ff3355" opacity="0.4" filter="url(#lg)"/>
+  <circle cx="1330" cy="150" r="3" fill="#f2bd5a" opacity="0.45" filter="url(#lg)"/>
+
+  <!-- sakura petals -->
+  <g fill="#ff9ecb">
+    <ellipse cx="120" cy="120" rx="4" ry="2.2" transform="rotate(-25 120 120)" opacity="0.55"/>
+    <ellipse cx="200" cy="90" rx="3.5" ry="2" transform="rotate(15 200 90)" opacity="0.45"/>
+    <ellipse cx="300" cy="200" rx="4" ry="2.2" transform="rotate(-40 300 200)" opacity="0.5"/>
+    <ellipse cx="450" cy="170" rx="3.5" ry="2" transform="rotate(30 450 170)" opacity="0.45"/>
+    <ellipse cx="560" cy="220" rx="4" ry="2.2" transform="rotate(-15 560 220)" opacity="0.5"/>
+    <ellipse cx="710" cy="180" rx="3.5" ry="2" transform="rotate(20 710 180)" opacity="0.4"/>
+    <ellipse cx="820" cy="90" rx="4" ry="2.2" transform="rotate(-30 820 90)" opacity="0.5"/>
+    <ellipse cx="1000" cy="200" rx="3.5" ry="2" transform="rotate(10 1000 200)" opacity="0.45"/>
+    <ellipse cx="1120" cy="170" rx="4" ry="2.2" transform="rotate(-20 1120 170)" opacity="0.4"/>
+    <ellipse cx="1260" cy="210" rx="3.5" ry="2" transform="rotate(35 1260 210)" opacity="0.5"/>
+    <ellipse cx="1390" cy="110" rx="4" ry="2.2" transform="rotate(-10 1390 110)" opacity="0.45"/>
+  </g>
+</svg>

@@ -12,7 +12,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Hanken+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600&family=M+PLUS+1:wght@400;500;700&family=Zen+Old+Mincho:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -30,6 +30,7 @@
       <span id="clock" aria-label="current time"></span>
     </div>
   </header>
+  <div class="progress" id="progress" aria-hidden="true"></div>
 
   <main id="top">
 
@@ -40,20 +41,20 @@
       <canvas id="hero-canvas" aria-hidden="true"></canvas>
       <span class="v-label jp" lang="ja" aria-hidden="true">端から端まで</span>
       <div class="hero-inner">
-        <p class="eyebrow mono">~/filipp · <a href="https://github.com/fleport74">@fleport74</a>
+        <p class="eyebrow mono reveal">~/filipp · <a href="https://github.com/fleport74">@fleport74</a>
           <span class="jp eyebrow-jp" lang="ja">プロダクト・エンジニア</span></p>
-        <h1>I build <em class="accent">AI&nbsp;products</em><br>end to end.</h1>
-        <p class="lede">
+        <h1 class="reveal">I build <em class="accent">AI&nbsp;products</em><br>end to end.</h1>
+        <p class="lede reveal">
           Voice copilots, parametric CAD engines, and the agent plumbing
           that makes them work. From the first sketch to production.
         </p>
-        <p class="domains mono">
+        <p class="domains mono reveal">
           <span class="chip" data-hue="cyan">voice ai</span>
           <span class="chip" data-hue="gold">computational geometry</span>
           <span class="chip" data-hue="violet">agents</span>
           <span class="chip" data-hue="shu">web &amp; mobile</span>
         </p>
-        <div class="hero-cta">
+        <div class="hero-cta reveal">
           <a class="btn" href="#work">Selected work <span class="arr" aria-hidden="true">↓</span></a>
           <button class="btn ghost mono" id="open-console" type="button">open console&nbsp;<kbd>/</kbd></button>
         </div>
@@ -68,7 +69,7 @@
 
     <!-- ============ WORK ============ -->
     <section class="section" id="work">
-      <span class="kanji-mark" lang="ja" aria-hidden="true">作</span>
+      <span class="kanji-mark jp" lang="ja" aria-hidden="true" data-parallax="-0.06">作</span>
       <div class="section-head reveal">
         <span class="section-path mono">~/work · <span class="jp" lang="ja">作品</span></span>
         <h2>Selected work</h2>
@@ -120,44 +121,107 @@
       <p class="interlude-gloss mono reveal">nana korobi ya oki: fall seven times, rise eight.</p>
     </section>
 
-    <!-- ============ APPROACH ============ -->
+    <!-- ============ APPROACH: the way ============ -->
     <section class="section" id="approach">
-      <span class="kanji-mark" lang="ja" aria-hidden="true">道</span>
+      <span class="kanji-mark jp" lang="ja" aria-hidden="true" data-parallax="-0.06">道</span>
       <div class="section-head reveal">
         <span class="section-path mono">~/approach · <span class="jp" lang="ja">流儀</span></span>
         <h2>How I work</h2>
+        <p class="dim">Four stations on the same road, walked in order, every time.</p>
       </div>
-      <div class="principles">
-        <div class="principle reveal">
-          <span class="mono p-slug">product/ <span class="jp jp-gloss" lang="ja">形</span></span>
-          <h3>Product before code</h3>
-          <p>Every build starts from the user's sentence, not the stack.
-             Ship the smallest thing that answers the real question, then iterate.</p>
-        </div>
-        <div class="principle reveal">
-          <span class="mono p-slug">agents/ <span class="jp jp-gloss" lang="ja">道具</span></span>
-          <h3>Agents as infrastructure</h3>
-          <p>LLMs are a runtime, not a feature: MCP servers, tool loops,
-             voice in, structured actions out.</p>
-        </div>
-        <div class="principle reveal">
-          <span class="mono p-slug">verify/ <span class="jp jp-gloss" lang="ja">検証</span></span>
-          <h3>Verified, not vibes</h3>
-          <p>Hundreds of generated tests, adversarial review passes, numbers
-             before screenshots. If it isn't checked, it isn't done.</p>
-        </div>
-        <div class="principle reveal">
-          <span class="mono p-slug">ship/ <span class="jp jp-gloss" lang="ja">出荷</span></span>
-          <h3>End-to-end ownership</h3>
-          <p>Figma to TypeScript to deploy. One person, whole loop:
-             design, build, ship, operate.</p>
+
+      <div class="journey" id="journey">
+        <svg class="journey-svg" viewBox="0 0 140 900" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="way" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ff3355"/>
+              <stop offset="35%" stop-color="#5bd7ff"/>
+              <stop offset="70%" stop-color="#b18cff"/>
+              <stop offset="100%" stop-color="#f2bd5a"/>
+            </linearGradient>
+          </defs>
+          <path id="journey-track" d="M70,0 C25,120 115,220 70,340 C30,450 115,540 70,660 C30,770 105,820 70,900"
+                fill="none" stroke="#1c1e26" stroke-width="2" vector-effect="non-scaling-stroke"/>
+          <path id="journey-path" d="M70,0 C25,120 115,220 70,340 C30,450 115,540 70,660 C30,770 105,820 70,900"
+                fill="none" stroke="url(#way)" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+          <circle id="journey-dot" r="5" cx="70" cy="0" fill="#fff"/>
+        </svg>
+
+        <div class="stations">
+
+          <div class="station reveal" data-hue="shu">
+            <svg class="station-scene" viewBox="0 0 130 100" aria-hidden="true"
+                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <path d="M18,32 Q65,18 112,32"/>
+              <line x1="28" y1="40" x2="102" y2="40"/>
+              <line x1="42" y1="36" x2="46" y2="90"/>
+              <line x1="88" y1="36" x2="84" y2="90"/>
+              <line x1="34" y1="56" x2="96" y2="56"/>
+              <rect x="61" y="42" width="8" height="14"/>
+            </svg>
+            <span class="mono p-slug">product/ <span class="jp jp-gloss" lang="ja">形</span></span>
+            <h3>Product before code</h3>
+            <p>Every build starts from the user's sentence, not the stack.
+               Ship the smallest thing that answers the real question, then iterate.</p>
+          </div>
+
+          <div class="station reveal" data-hue="cyan">
+            <svg class="station-scene" viewBox="0 0 130 100" aria-hidden="true"
+                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="65" y1="12" x2="65" y2="22"/>
+              <circle cx="65" cy="9" r="3" fill="currentColor" stroke="none"/>
+              <rect x="50" y="22" width="30" height="7" rx="2"/>
+              <ellipse cx="65" cy="54" rx="27" ry="27"/>
+              <path d="M40,44 Q65,50 90,44"/>
+              <path d="M39,62 Q65,68 91,62"/>
+              <circle cx="56" cy="52" r="3.5" fill="currentColor" stroke="none"/>
+              <circle cx="74" cy="52" r="3.5" fill="currentColor" stroke="none"/>
+              <rect x="52" y="79" width="26" height="6" rx="2"/>
+              <line x1="65" y1="85" x2="65" y2="94"/>
+            </svg>
+            <span class="mono p-slug">agents/ <span class="jp jp-gloss" lang="ja">道具</span></span>
+            <h3>Agents as infrastructure</h3>
+            <p>LLMs are a runtime, not a feature: MCP servers, tool loops,
+               voice in, structured actions out.</p>
+          </div>
+
+          <div class="station reveal" data-hue="violet">
+            <svg class="station-scene" viewBox="0 0 130 100" aria-hidden="true"
+                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <circle cx="65" cy="8" r="2.5" fill="currentColor" stroke="none"/>
+              <line x1="65" y1="10" x2="40" y2="32"/>
+              <line x1="65" y1="10" x2="90" y2="32"/>
+              <path d="M30,44 L65,28 L100,44 L100,82 L30,82 Z" stroke-linejoin="round"/>
+              <path d="M48,57 L60,70 L84,46" stroke-width="4"/>
+            </svg>
+            <span class="mono p-slug">verify/ <span class="jp jp-gloss" lang="ja">検証</span></span>
+            <h3>Verified, not vibes</h3>
+            <p>Hundreds of generated tests, adversarial review passes, numbers
+               before screenshots. If it isn't checked, it isn't done.</p>
+          </div>
+
+          <div class="station reveal" data-hue="gold">
+            <svg class="station-scene" viewBox="0 0 130 100" aria-hidden="true"
+                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <circle cx="98" cy="26" r="13" opacity="0.55"/>
+              <circle cx="98" cy="26" r="6" fill="currentColor" stroke="none" opacity="0.6"/>
+              <path d="M8,88 L52,32 Q65,24 78,32 L122,88" stroke-linejoin="round"/>
+              <path d="M44,44 L52,51 L60,42 L68,51 L76,44"/>
+            </svg>
+            <span class="mono p-slug">ship/ <span class="jp jp-gloss" lang="ja">出荷</span></span>
+            <h3>End-to-end ownership</h3>
+            <p>Figma to TypeScript to deploy. One person, whole loop:
+               design, build, ship, operate.</p>
+          </div>
+
         </div>
       </div>
     </section>
 
     <!-- ============ CONTACT ============ -->
     <section class="section contact" id="contact">
-      <span class="kanji-mark" lang="ja" aria-hidden="true">縁</span>
+      <span class="kanji-mark jp" lang="ja" aria-hidden="true" data-parallax="-0.06">縁</span>
+      <div class="contact-art" aria-hidden="true"></div>
       <div class="section-head reveal">
         <span class="section-path mono">~/contact · <span class="jp" lang="ja">連絡</span></span>
         <h2>Contact</h2>

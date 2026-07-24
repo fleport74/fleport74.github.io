@@ -19,8 +19,15 @@ function tickClock() {
 tickClock();
 setInterval(tickClock, 1000);
 
-/* ---------------- scroll reveals ---------------- */
+/* ---------------- scroll reveals (staggered per group) ---------------- */
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+document.querySelectorAll(".grid, .stations, .hero-inner").forEach((group) => {
+  [...group.children]
+    .filter((c) => c.classList.contains("reveal"))
+    .forEach((c, i) => c.style.setProperty("--d", `${i * 110}ms`));
+});
+
 const revealEls = document.querySelectorAll(".reveal");
 if (reduced) {
   revealEls.forEach((el) => el.classList.add("in"));
@@ -39,14 +46,100 @@ if (reduced) {
   revealEls.forEach((el) => io.observe(el));
 }
 
-/* ---------------- card mouse glow ---------------- */
+/* ---------------- card mouse glow + 3D tilt ---------------- */
 document.querySelectorAll(".card").forEach((card) => {
   card.addEventListener("pointermove", (e) => {
     const r = card.getBoundingClientRect();
-    card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    card.style.setProperty("--my", `${e.clientY - r.top}px`);
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    card.style.setProperty("--mx", `${x}px`);
+    card.style.setProperty("--my", `${y}px`);
+    if (!reduced) {
+      const rx = -((y - r.height / 2) / r.height) * 5;
+      const ry = ((x - r.width / 2) / r.width) * 5;
+      card.style.transform =
+        `perspective(700px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-2px)`;
+    }
+  });
+  card.addEventListener("pointerleave", () => {
+    card.style.transform = "";
   });
 });
+
+/* ---------------- nav: highlight the active section ---------------- */
+const navLinks = [...document.querySelectorAll(".nav-links a")];
+const sectionObs = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        navLinks.forEach((a) =>
+          a.classList.toggle("active", a.getAttribute("href") === `#${e.target.id}`)
+        );
+      }
+    }
+  },
+  { rootMargin: "-40% 0px -55% 0px" }
+);
+["work", "approach", "contact"].forEach((id) => {
+  const el = document.getElementById(id);
+  if (el) sectionObs.observe(el);
+});
+
+/* ---------------- scroll-driven: progress bar, parallax, journey ---------------- */
+const progressEl = document.getElementById("progress");
+const parallaxEls = [...document.querySelectorAll("[data-parallax]")].map((el) => ({
+  el,
+  s: parseFloat(el.dataset.parallax),
+}));
+
+const journeyEl = document.getElementById("journey");
+const journeyPath = document.getElementById("journey-path");
+const journeyDot = document.getElementById("journey-dot");
+let journeyLen = 0;
+if (journeyPath) {
+  journeyLen = journeyPath.getTotalLength();
+  journeyPath.style.strokeDasharray = journeyLen;
+  journeyPath.style.strokeDashoffset = reduced ? 0 : journeyLen;
+}
+
+let scrollQueued = false;
+function onScrollFrame() {
+  scrollQueued = false;
+  const doc = document.documentElement;
+
+  if (progressEl) {
+    const p = doc.scrollTop / Math.max(1, doc.scrollHeight - innerHeight);
+    progressEl.style.transform = `scaleX(${p.toFixed(4)})`;
+  }
+
+  if (!reduced) {
+    // parallax offsets are measured against the parent so the
+    // transform we set here never feeds back into the measurement
+    for (const { el, s } of parallaxEls) {
+      const r = el.parentElement.getBoundingClientRect();
+      const off = (r.top + r.height / 2 - innerHeight / 2) * s;
+      el.style.transform = `translateY(${off.toFixed(1)}px)`;
+    }
+  }
+
+  if (journeyPath && journeyEl) {
+    const r = journeyEl.getBoundingClientRect();
+    const prog = Math.min(1, Math.max(0, (innerHeight * 0.8 - r.top) / r.height));
+    if (!reduced) journeyPath.style.strokeDashoffset = journeyLen * (1 - prog);
+    const pt = journeyPath.getPointAtLength(journeyLen * (reduced ? 1 : prog));
+    journeyDot.setAttribute("cx", pt.x.toFixed(1));
+    journeyDot.setAttribute("cy", pt.y.toFixed(1));
+  }
+}
+function queueScrollFrame() {
+  if (!scrollQueued) {
+    scrollQueued = true;
+    requestAnimationFrame(onScrollFrame);
+  }
+}
+addEventListener("scroll", queueScrollFrame, { passive: true });
+addEventListener("resize", queueScrollFrame);
+queueScrollFrame();
 
 /* ============================================================
    SHAPES — unit space, y up, roughly within [-1, 1]

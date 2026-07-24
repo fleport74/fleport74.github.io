@@ -2,7 +2,7 @@
    sheet. Also owns the accent theme (CSS vars + localStorage). */
 
 const ACCENTS = {
-  shu: "#ff5348",
+  shu: "#ff3355",
   gold: "#d8a94f",
   cyan: "#58c4dc",
   violet: "#a78bfa",
