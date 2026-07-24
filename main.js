@@ -22,7 +22,7 @@ setInterval(tickClock, 1000);
 /* ---------------- scroll reveals (staggered per group) ---------------- */
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-document.querySelectorAll(".grid, .stations, .hero-inner").forEach((group) => {
+document.querySelectorAll(".vending, .stations, .hero-inner").forEach((group) => {
   [...group.children]
     .filter((c) => c.classList.contains("reveal"))
     .forEach((c, i) => c.style.setProperty("--d", `${i * 110}ms`));
@@ -46,25 +46,52 @@ if (reduced) {
   revealEls.forEach((el) => io.observe(el));
 }
 
-/* ---------------- card mouse glow + 3D tilt ---------------- */
-document.querySelectorAll(".card").forEach((card) => {
-  card.addEventListener("pointermove", (e) => {
-    const r = card.getBoundingClientRect();
-    const x = e.clientX - r.left;
-    const y = e.clientY - r.top;
-    card.style.setProperty("--mx", `${x}px`);
-    card.style.setProperty("--my", `${y}px`);
-    if (!reduced) {
-      const rx = -((y - r.height / 2) / r.height) * 5;
-      const ry = ((x - r.width / 2) / r.width) * 5;
-      card.style.transform =
-        `perspective(700px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-2px)`;
-    }
-  });
-  card.addEventListener("pointerleave", () => {
-    card.style.transform = "";
-  });
-});
+/* ---------------- vending machine (selected work) ---------------- */
+const slots = [...document.querySelectorAll(".slot")];
+const screenCards = [...document.querySelectorAll(".screen-card")];
+const screenIdxEl = document.getElementById("screen-idx");
+const machineEl = document.querySelector(".machine");
+const trayEl = document.querySelector(".machine-tray");
+const SLOT_CODES = ["A1", "A2", "B1", "B2"];
+
+function dropCan(i) {
+  const can = slots[i].querySelector(".can");
+  const mr = machineEl.getBoundingClientRect();
+  const cr = can.getBoundingClientRect();
+  const tr = trayEl.getBoundingClientRect();
+  const clone = can.cloneNode(true);
+  clone.classList.add("drop");
+  // carry the slot's hue onto the clone: the machine has no data-hue,
+  // so --hue would otherwise fall back to the accent color
+  clone.setAttribute("data-hue", slots[i].getAttribute("data-hue"));
+  clone.style.left = `${cr.left - mr.left}px`;
+  clone.style.top = `${cr.top - mr.top}px`;
+  machineEl.appendChild(clone);
+  const dx = tr.left + tr.width / 2 - (cr.left + cr.width / 2);
+  const dy = tr.bottom - 8 - cr.bottom;
+  clone.animate(
+    [
+      { transform: "translate(0,0) rotate(0deg)" },
+      { transform: `translate(${dx * 0.55}px, ${dy * 0.72}px) rotate(-9deg)`, offset: 0.62 },
+      { transform: `translate(${dx}px, ${dy}px) rotate(7deg)` },
+    ],
+    { duration: 640, easing: "cubic-bezier(.45,0,.6,1)", fill: "forwards" }
+  );
+  setTimeout(
+    () => clone.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, fill: "forwards" }),
+    880
+  );
+  setTimeout(() => clone.remove(), 1300);
+}
+
+function selectProject(i, withDrop) {
+  slots.forEach((s, j) => s.setAttribute("aria-pressed", String(i === j)));
+  screenCards.forEach((c, j) => c.classList.toggle("active", i === j));
+  if (screenIdxEl) screenIdxEl.textContent = SLOT_CODES[i];
+  if (withDrop && !reduced && machineEl && trayEl) dropCan(i);
+}
+
+slots.forEach((s, i) => s.addEventListener("click", () => selectProject(i, true)));
 
 /* ---------------- nav: highlight the active section ---------------- */
 const navLinks = [...document.querySelectorAll(".nav-links a")];

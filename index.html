@@ -75,42 +75,80 @@
         <h2>Selected work</h2>
         <p class="dim">Most of these live in private repos. Happy to walk through any of them.</p>
       </div>
-      <div class="grid">
+      <div class="vending">
 
-        <article class="card reveal" data-hue="cyan">
-          <span class="tag mono">voice ai</span>
-          <h3>Jarvis</h3>
-          <p>A local-first voice copilot: wake word, streaming Whisper STT, neural TTS,
-             and MCP tool-calling into calendar, mail, GitHub and a live browser.
-             Runs on my machine, talks to my agents.</p>
-          <p class="tech mono">Python · Faster-Whisper · Kokoro · MCP</p>
-        </article>
+        <div class="machine reveal" role="group" aria-label="project selector, styled as a Japanese vending machine">
+          <div class="machine-head">
+            <span class="machine-sign jp" lang="ja">作品</span>
+            <span class="machine-sign-sub mono">WORKS · 24H · self-service</span>
+          </div>
+          <div class="machine-window">
+            <button class="slot" type="button" data-hue="cyan" aria-pressed="true">
+              <span class="can"><span class="can-kanji jp" lang="ja">声</span></span>
+              <span class="slot-label mono">A1 · jarvis</span>
+            </button>
+            <button class="slot" type="button" data-hue="gold" aria-pressed="false">
+              <span class="can"><span class="can-kanji jp" lang="ja">環</span></span>
+              <span class="slot-label mono">A2 · cad-engine</span>
+            </button>
+            <button class="slot" type="button" data-hue="violet" aria-pressed="false">
+              <span class="can"><span class="can-kanji jp" lang="ja">巣</span></span>
+              <span class="slot-label mono">B1 · hive</span>
+            </button>
+            <button class="slot" type="button" data-hue="shu" aria-pressed="false">
+              <span class="can"><span class="can-kanji jp" lang="ja">業</span></span>
+              <span class="slot-label mono">B2 · client-work</span>
+            </button>
+          </div>
+          <div class="machine-mid mono">
+            <span class="coin-slot" aria-hidden="true"></span>
+            <span>no coins needed · <span class="jp" lang="ja">無料</span></span>
+          </div>
+          <div class="machine-tray" aria-hidden="true"></div>
+        </div>
 
-        <article class="card reveal" data-hue="gold">
-          <span class="tag mono">computational geometry</span>
-          <h3>Jewelry CAD engine</h3>
-          <p>A parametric NURBS generator that turns a text spec into manufacturable
-             .3dm jewelry: real stone seats, pavé packing, and script nameplates
-             where the glyph outline <em>is</em> the metal. 500+ geometry tests.</p>
-          <p class="tech mono">TypeScript · rhino3dm · manifold</p>
-        </article>
+        <div class="screen reveal" aria-live="polite">
+          <div class="screen-status mono">
+            <span id="screen-idx">A1</span> · dispensed ·
+            <span class="jp" lang="ja">在庫あり</span>
+            <span class="blink" aria-hidden="true">▮</span>
+          </div>
 
-        <article class="card reveal" data-hue="violet">
-          <span class="tag mono">product systems</span>
-          <h3>Hive</h3>
-          <p>A spatial team workspace: map-based rooms, chat, and projects with
-             timeline, calendar and docs, built as a full-stack monorepo.</p>
-          <p class="tech mono">Next.js · Supabase · TypeScript</p>
-        </article>
+          <article class="screen-card active" data-hue="cyan">
+            <span class="tag mono">voice ai</span>
+            <h3>Jarvis</h3>
+            <p>A local-first voice copilot: wake word, streaming Whisper STT, neural TTS,
+               and MCP tool-calling into calendar, mail, GitHub and a live browser.
+               Runs on my machine, talks to my agents.</p>
+            <p class="tech mono">Python · Faster-Whisper · Kokoro · MCP</p>
+          </article>
 
-        <article class="card reveal" data-hue="shu">
-          <span class="tag mono">client work</span>
-          <h3>Production systems</h3>
-          <p>Ongoing work for teams and clients, in daily production use.
-             Names and specifics stay private; ask and I'll walk you through
-             what's shareable.</p>
-          <p class="tech mono">TypeScript · Python · React Native</p>
-        </article>
+          <article class="screen-card" data-hue="gold">
+            <span class="tag mono">computational geometry</span>
+            <h3>Jewelry CAD engine</h3>
+            <p>A parametric NURBS generator that turns a text spec into manufacturable
+               .3dm jewelry: real stone seats, pavé packing, and script nameplates
+               where the glyph outline <em>is</em> the metal. 500+ geometry tests.</p>
+            <p class="tech mono">TypeScript · rhino3dm · manifold</p>
+          </article>
+
+          <article class="screen-card" data-hue="violet">
+            <span class="tag mono">product systems</span>
+            <h3>Hive</h3>
+            <p>A spatial team workspace: map-based rooms, chat, and projects with
+               timeline, calendar and docs, built as a full-stack monorepo.</p>
+            <p class="tech mono">Next.js · Supabase · TypeScript</p>
+          </article>
+
+          <article class="screen-card" data-hue="shu">
+            <span class="tag mono">client work</span>
+            <h3>Production systems</h3>
+            <p>Ongoing work for teams and clients, in daily production use.
+               Names and specifics stay private; ask and I'll walk you through
+               what's shareable.</p>
+            <p class="tech mono">TypeScript · Python · React Native</p>
+          </article>
+        </div>
 
       </div>
     </section>
