@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Filipp · AI / Product Engineer</title>
+  <meta name="description" content="Filipp (@fleport74): AI/Product Engineer. Voice copilots, parametric CAD engines, Telegram platforms, and the agent plumbing that makes them work.">
+  <meta name="theme-color" content="#0a0b0e">
+  <meta property="og:title" content="Filipp · AI / Product Engineer">
+  <meta property="og:description" content="I build AI products end to end: voice copilots, computational geometry, agents in production.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Hanken+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="nav">
+    <a class="monogram mono" href="#top">f74</a>
+    <nav class="nav-links mono">
+      <a href="#work">work</a>
+      <a href="#approach">approach</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <div class="nav-status mono">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="status-text">open to interesting problems</span>
+      <span id="clock" aria-label="current UTC time"></span>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <p class="eyebrow mono">~/filipp · <a href="https://github.com/fleport74">@fleport74</a></p>
+        <h1>I build <em class="accent">AI&nbsp;products</em><br>end to end.</h1>
+        <p class="lede">
+          Voice copilots, parametric CAD engines, Telegram platforms,
+          and the agent plumbing that makes them work.
+          From the first sketch to production.
+        </p>
+        <div class="hero-cta">
+          <a class="btn" href="#work">Selected work</a>
+          <button class="btn ghost mono" id="open-console" type="button">open console&nbsp;<kbd>/</kbd></button>
+        </div>
+      </div>
+      <button class="shape-caption mono" id="shape-caption" type="button"
+              title="Click to morph">
+        <span id="shape-idx">[1/4]</span>
+        <span id="shape-label">computational jewelry</span>
+        <span id="shape-sub" class="dim">parametric CAD · NURBS</span>
+      </button>
+    </section>
+
+    <!-- ============ WORK ============ -->
+    <section class="section" id="work">
+      <div class="section-head reveal">
+        <span class="section-path mono">~/work</span>
+        <h2>Selected work</h2>
+        <p class="dim">Most of these live in private repos. Happy to walk through any of them.</p>
+      </div>
+      <div class="grid">
+
+        <article class="card reveal">
+          <span class="tag mono">voice ai</span>
+          <h3>Jarvis</h3>
+          <p>A local-first voice copilot: wake word, streaming Whisper STT, neural TTS,
+             and MCP tool-calling into calendar, mail, GitHub and a live browser.
+             Runs on my machine, talks to my agents.</p>
+          <p class="tech mono">Python · Faster-Whisper · Kokoro · MCP</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag mono">computational geometry</span>
+          <h3>Jewelry CAD engine</h3>
+          <p>A parametric NURBS generator that turns a text spec into manufacturable
+             .3dm jewelry: real stone seats, pavé packing, and script nameplates
+             where the glyph outline <em>is</em> the metal. 500+ geometry tests.</p>
+          <p class="tech mono">TypeScript · rhino3dm · manifold</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag mono">web3 product</span>
+          <h3>Seasons platform</h3>
+          <p>Telegram command center plus a read-only on-chain terminal for a token
+             team: bot, mini-app and site, all in daily production use.</p>
+          <p class="tech mono">Python · SvelteKit · Solana · Railway</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag mono">ai ops</span>
+          <h3>Greenhouse</h3>
+          <p>Voice-to-task design-ops: drop a voice note in Telegram, get structured
+             tasks with reminders and two-way Notion sync, grounded by retrieval
+             over the team's knowledge base.</p>
+          <p class="tech mono">Next.js · Supabase · Whisper · Claude</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag mono">product systems</span>
+          <h3>Hive</h3>
+          <p>A spatial team workspace: map-based rooms, chat, and projects with
+             timeline, calendar and docs, built as a full-stack monorepo.</p>
+          <p class="tech mono">Next.js · Supabase · TypeScript</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="tag mono">mobile</span>
+          <h3>QFS field app</h3>
+          <p>Offline-first field-service app for a cleaning operation: role-based
+             views, per-location access control, schedule auto-distribution,
+             10 languages, 600+ tests.</p>
+          <p class="tech mono">React Native · SQLite · i18n</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============ APPROACH ============ -->
+    <section class="section" id="approach">
+      <div class="section-head reveal">
+        <span class="section-path mono">~/approach</span>
+        <h2>How I work</h2>
+      </div>
+      <div class="principles">
+        <div class="principle reveal">
+          <span class="mono p-slug">product/</span>
+          <h3>Product before code</h3>
+          <p>Every build starts from the user's sentence, not the stack.
+             Ship the smallest thing that answers the real question, then iterate.</p>
+        </div>
+        <div class="principle reveal">
+          <span class="mono p-slug">agents/</span>
+          <h3>Agents as infrastructure</h3>
+          <p>LLMs are a runtime, not a feature: MCP servers, tool loops,
+             voice in, structured actions out.</p>
+        </div>
+        <div class="principle reveal">
+          <span class="mono p-slug">verify/</span>
+          <h3>Verified, not vibes</h3>
+          <p>Hundreds of generated tests, adversarial review passes, numbers
+             before screenshots. If it isn't checked, it isn't done.</p>
+        </div>
+        <div class="principle reveal">
+          <span class="mono p-slug">ship/</span>
+          <h3>End-to-end ownership</h3>
+          <p>Figma to TypeScript to deploy. One person, whole loop:
+             design, build, ship, operate.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section contact" id="contact">
+      <div class="section-head reveal">
+        <span class="section-path mono">~/contact</span>
+        <h2>Contact</h2>
+      </div>
+      <div class="reveal">
+        <p class="contact-line">Have an odd, ambitious product idea?<br>I like those.</p>
+        <div class="hero-cta">
+          <a class="btn" href="https://github.com/fleport74">GitHub → @fleport74</a>
+          <button class="btn ghost mono" type="button" data-open-console>or type <kbd>/</kbd> and say hi</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer mono">
+    <span>no frameworks, no trackers. vanilla JS + one &lt;canvas&gt;</span>
+    <span>© 2026 · built by me &amp; my agents</span>
+  </footer>
+
+  <!-- ============ CONSOLE ============ -->
+  <aside class="console" id="console" aria-label="interactive console" hidden>
+    <div class="console-head mono">
+      <span>filipp@github-pages:~</span>
+      <button class="console-close mono" id="console-close" type="button" aria-label="close console">esc ✕</button>
+    </div>
+    <div class="console-out mono" id="console-out" aria-live="polite"></div>
+    <form class="console-line mono" id="console-form" autocomplete="off">
+      <span class="prompt accent">❯</span>
+      <input id="console-input" type="text" spellcheck="false"
+             aria-label="console input" placeholder="type 'help'">
+    </form>
+  </aside>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
